@@ -139,24 +139,63 @@
       justify-content: flex-end;
     }
     .mood-toggle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(35, 20, 9, 0.18);
-      background: #fff;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 8px;
+      height: 42px;
+      padding: 0 18px 0 14px;
+      border-radius: 100px;
+      border: 1.5px solid rgba(35, 20, 9, 0.16);
+      background: #fff;
       cursor: pointer;
       flex-shrink: 0;
-      transition: transform 200ms var(--ease-out-quart), box-shadow 200ms var(--ease-out-quart), border-color 200ms ease;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--dark-brown);
+      white-space: nowrap;
+      transition: transform 220ms var(--ease-out-quart), box-shadow 220ms var(--ease-out-quart), border-color 220ms ease, background 220ms ease;
     }
     .mood-toggle:hover {
-      border-color: rgba(35, 20, 9, 0.4);
-      box-shadow: 0 4px 14px rgba(35, 20, 9, 0.12);
+      border-color: rgba(35, 20, 9, 0.32);
+      box-shadow: 0 6px 18px rgba(35, 20, 9, 0.14);
+      transform: translateY(-1px);
     }
-    .mood-toggle:active { transform: scale(0.9) rotate(20deg); }
     .mood-toggle:focus-visible { outline-offset: 3px; }
+    .mood-toggle-dots {
+      display: inline-flex;
+      flex-shrink: 0;
+    }
+    .mood-toggle-dots circle { transition: fill 300ms ease; }
+    .mood-toggle.is-shuffling { animation: mood-bounce 650ms var(--ease-out-quart); }
+    .mood-toggle.is-shuffling .mood-toggle-dots { animation: mood-spin 650ms var(--ease-out-quart); }
+    @keyframes mood-bounce {
+      0%   { transform: scale(1) rotate(0deg); }
+      30%  { transform: scale(0.88) rotate(-8deg); }
+      55%  { transform: scale(1.1) rotate(6deg); }
+      75%  { transform: scale(0.97) rotate(-3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes mood-spin {
+      0%   { transform: rotate(0deg) scale(1); }
+      50%  { transform: rotate(190deg) scale(1.25); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    .mood-wipe-ring, .mood-confetti-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform, opacity;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mood-toggle.is-shuffling,
+      .mood-toggle.is-shuffling .mood-toggle-dots { animation: none; }
+    }
 
     /* ─── HERO ─── */
     .hero {
@@ -813,6 +852,8 @@
         text-align: left;
       }
       .nav-actions { width: auto; margin-right: 10px; }
+      .mood-toggle-label { display: none; }
+      .mood-toggle { padding: 0; width: 42px; justify-content: center; gap: 0; }
       .nav-hamburger { display: flex; }
       .nav-links {
         display: none;
@@ -970,11 +1011,12 @@
   </div>
   <div class="nav-actions">
     <button class="mood-toggle" type="button" aria-label="Mélanger les couleurs du site" title="Mélanger les couleurs">
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-        <circle cx="8" cy="9" r="4.2" fill="#F16925"/>
-        <circle cx="15.5" cy="8" r="4.2" fill="#A790EA"/>
-        <circle cx="12" cy="15.5" r="4.2" fill="#FDE8E9" stroke="rgba(35,20,9,0.25)" stroke-width="0.6"/>
+      <svg class="mood-toggle-dots" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="8" cy="9" r="4.2" fill="var(--dark-green)"/>
+        <circle cx="15.5" cy="8" r="4.2" fill="var(--accent-purple)"/>
+        <circle cx="12" cy="15.5" r="4.2" fill="var(--rose)" stroke="rgba(35,20,9,0.25)" stroke-width="0.6"/>
       </svg>
+      <span class="mood-toggle-label">Shuffle my glow</span>
     </button>
   </div>
   <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
@@ -1507,17 +1549,24 @@
   new ResizeObserver(syncNavH).observe(nav);
 })();
 
-/* ─── MOOD PALETTE SHUFFLE ─── */
+/* ─── MOOD PALETTE SHUFFLE ───
+   Stays strictly within the brand's 5 approved colors (orange, purple,
+   dark, warm cream, blush) — only the ROLE each color plays is reshuffled,
+   so every combination still reads as "Bloom Up" no matter what lands. */
 (function () {
   var STORAGE_KEY = 'bloomup-palette';
+  var CREAM = '#FBF4EA';
+  var DARK = '#353535';
+  var ORANGE = '#F16925';
+  var PURPLE = '#A790EA';
+  var WARM = '#FFEBC6';
+  var BLUSH = '#FDE8E9';
 
   var PALETTES = [
-    { name: 'Sunrise',  cream: '#FBF4EA', darkBrown: '#353535', darkGreen: '#F16925', rose: '#FDE8E9', accentPurple: '#A790EA', warmSection: '#FFEBC6' },
-    { name: 'Bloom',    cream: '#FDF4F1', darkBrown: '#3A2A28', darkGreen: '#E8636F', rose: '#FDEAE7', accentPurple: '#6FAE82', warmSection: '#FBE3DC' },
-    { name: 'Citrus',   cream: '#FBF3E6', darkBrown: '#332B1C', darkGreen: '#DC8A2E', rose: '#FCEBD2', accentPurple: '#379C90', warmSection: '#F7E6C4' },
-    { name: 'Lavande',  cream: '#F8F5FD', darkBrown: '#2C2438', darkGreen: '#8C6FCB', rose: '#F1ECFB', accentPurple: '#F0955C', warmSection: '#EDE6FA' },
-    { name: 'Sage',     cream: '#F3F7F1', darkBrown: '#22302A', darkGreen: '#4F7A63', rose: '#E9F1EC', accentPurple: '#E0956B', warmSection: '#E4EDE1' },
-    { name: 'Berry',    cream: '#FBF1F5', darkBrown: '#331C28', darkGreen: '#B25583', rose: '#F7E7EE', accentPurple: '#E8B44A', warmSection: '#F5E3D6' }
+    { name: 'Sunrise',  darkBrown: DARK, darkGreen: ORANGE, rose: BLUSH, accentPurple: PURPLE, warmSection: WARM },
+    { name: 'Amethyst', darkBrown: DARK, darkGreen: PURPLE, rose: WARM,  accentPurple: ORANGE, warmSection: BLUSH },
+    { name: 'Ink & Sun', darkBrown: DARK, darkGreen: DARK,   rose: WARM,  accentPurple: ORANGE, warmSection: BLUSH },
+    { name: 'Ink & Iris', darkBrown: DARK, darkGreen: DARK,  rose: BLUSH, accentPurple: PURPLE, warmSection: WARM }
   ];
 
   var root = document.documentElement;
@@ -1526,7 +1575,6 @@
 
   function applyPalette(index) {
     var p = PALETTES[index];
-    root.style.setProperty('--cream', p.cream);
     root.style.setProperty('--dark-brown', p.darkBrown);
     root.style.setProperty('--dark-green', p.darkGreen);
     root.style.setProperty('--rose', p.rose);
@@ -1537,20 +1585,91 @@
     if (toggle) toggle.title = 'Ambiance actuelle : ' + p.name + ' — clique pour changer';
   }
 
+  /* ── Confetti burst — little dots of the palette pop out of the button ── */
+  function burstConfetti(x, y) {
+    var colors = [ORANGE, PURPLE, DARK, WARM, BLUSH];
+    var count = 14;
+    for (var i = 0; i < count; i++) {
+      var dot = document.createElement('span');
+      dot.className = 'mood-confetti-dot';
+      var size = 5 + Math.random() * 6;
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      dot.style.background = colors[i % colors.length];
+      dot.style.transform = 'translate(' + (x - size / 2) + 'px,' + (y - size / 2) + 'px)';
+      document.body.appendChild(dot);
+
+      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.6 - 0.3);
+      var distance = 70 + Math.random() * 90;
+      var dx = Math.cos(angle) * distance;
+      var dy = Math.sin(angle) * distance + 40; /* slight gravity drift */
+
+      var spin = Math.random() > 0.5 ? 360 : -360;
+      var anim = dot.animate([
+        { transform: dot.style.transform + ' translate(0,0) rotate(0deg) scale(1)', opacity: 1, offset: 0 },
+        { transform: dot.style.transform + ' translate(' + (dx * 0.7) + 'px,' + (dy * 0.7) + 'px) rotate(' + (spin * 0.7) + 'deg) scale(0.85)', opacity: 1, offset: 0.6 },
+        { transform: dot.style.transform + ' translate(' + dx + 'px,' + dy + 'px) rotate(' + spin + 'deg) scale(0.4)', opacity: 0, offset: 1 }
+      ], { duration: 950 + Math.random() * 300, easing: 'cubic-bezier(0.33, 1, 0.68, 1)' });
+      anim.onfinish = function (el) { return function () { el.remove(); }; }(dot);
+    }
+  }
+
+  /* ── Colour wipe — a ring of the incoming surface colour ripples out from the button ── */
+  function burstWipe(x, y, color) {
+    var maxDist = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    ) * 1.15;
+    var ring = document.createElement('span');
+    ring.className = 'mood-wipe-ring';
+    ring.style.background = color;
+    ring.style.left = x + 'px';
+    ring.style.top = y + 'px';
+    document.body.appendChild(ring);
+    var anim = ring.animate([
+      { width: '0px', height: '0px', transform: 'translate(-50%,-50%)', opacity: 0.5, easing: 'cubic-bezier(0.33, 1, 0.68, 1)' },
+      { width: maxDist + 'px', height: maxDist + 'px', transform: 'translate(-50%,-50%)', opacity: 0.4, offset: 0.7 },
+      { width: maxDist + 'px', height: maxDist + 'px', transform: 'translate(-50%,-50%)', opacity: 0 }
+    ], { duration: 950 });
+    anim.onfinish = function () { ring.remove(); };
+  }
+
   function shuffle() {
     var next;
     do {
       next = Math.floor(Math.random() * PALETTES.length);
     } while (next === currentIndex && PALETTES.length > 1);
+
+    var origin = { x: window.innerWidth - 60, y: 30 };
+    if (toggle) {
+      var r = toggle.getBoundingClientRect();
+      origin.x = r.left + r.width / 2;
+      origin.y = r.top + r.height / 2;
+      toggle.classList.remove('is-shuffling');
+      /* eslint-disable-next-line no-unused-expressions */
+      toggle.offsetWidth; /* restart animation */
+      toggle.classList.add('is-shuffling');
+    }
+
     applyPalette(next);
     try { localStorage.setItem(STORAGE_KEY, String(next)); } catch (e) {}
+
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) {
+      burstWipe(origin.x, origin.y, PALETTES[next].darkGreen);
+      burstConfetti(origin.x, origin.y);
+    }
   }
 
   var saved = null;
   try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
   if (saved !== null && PALETTES[+saved]) applyPalette(+saved);
+  else applyPalette(0);
 
-  if (toggle) toggle.addEventListener('click', shuffle);
+  if (toggle) {
+    toggle.addEventListener('click', shuffle);
+    toggle.addEventListener('animationend', function () { toggle.classList.remove('is-shuffling'); });
+  }
 })();
 </script>
 </body>
