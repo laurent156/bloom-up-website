@@ -70,6 +70,11 @@
       font-family: var(--sans);
       overflow-x: hidden;
     }
+    /* ─── MOOD PALETTE TRANSITION ─── */
+    body, .hero-left, .ticker, footer, .badge-green, .badge-outline-green,
+    .rituel-content, #carte, .footer-brand, .menu-item-desc {
+      transition: background-color 550ms ease, color 550ms ease, border-color 550ms ease;
+    }
     .page-wrapper {
       max-width: 1440px;
       margin: 0 auto;
@@ -127,7 +132,31 @@
       display: block;
       margin-top: 2px;
     }
-    .nav-spacer { width: 260px; }
+    .nav-actions {
+      width: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .mood-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(35, 20, 9, 0.18);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 200ms var(--ease-out-quart), box-shadow 200ms var(--ease-out-quart), border-color 200ms ease;
+    }
+    .mood-toggle:hover {
+      border-color: rgba(35, 20, 9, 0.4);
+      box-shadow: 0 4px 14px rgba(35, 20, 9, 0.12);
+    }
+    .mood-toggle:active { transform: scale(0.9) rotate(20deg); }
+    .mood-toggle:focus-visible { outline-offset: 3px; }
 
     /* ─── HERO ─── */
     .hero {
@@ -761,6 +790,12 @@
       transform: translateY(-7px) rotate(-45deg);
     }
 
+    /* ─── HERO SUNBURST — narrower desktop/tablet widths need less reach
+       since hero height stays fixed while the text wraps onto more lines ─── */
+    @media (max-width: 1300px) {
+      .hero-sunburst { width: 280px; height: 280px; left: -140px; bottom: -140px; }
+    }
+
     /* ─── TABLET + MOBILE NAV (≤1023px) ─── */
     @media (max-width: 1023px) {
       nav {
@@ -774,7 +809,7 @@
         flex: 1;
         text-align: left;
       }
-      .nav-spacer { display: none; }
+      .nav-actions { width: auto; margin-right: 10px; }
       .nav-hamburger { display: flex; }
       .nav-links {
         display: none;
@@ -930,7 +965,15 @@
     <span class="nav-logo-name">Bloom Up</span>
     <span class="nav-logo-sub">Collagen Café &amp; Beauty</span>
   </div>
-  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <button class="mood-toggle" type="button" aria-label="Mélanger les couleurs du site" title="Mélanger les couleurs">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="8" cy="9" r="4.2" fill="#F16925"/>
+        <circle cx="15.5" cy="8" r="4.2" fill="#A790EA"/>
+        <circle cx="12" cy="15.5" r="4.2" fill="#FDE8E9" stroke="rgba(35,20,9,0.25)" stroke-width="0.6"/>
+      </svg>
+    </button>
+  </div>
   <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -1416,6 +1459,52 @@
   }
   syncNavH();
   new ResizeObserver(syncNavH).observe(nav);
+})();
+
+/* ─── MOOD PALETTE SHUFFLE ─── */
+(function () {
+  var STORAGE_KEY = 'bloomup-palette';
+
+  var PALETTES = [
+    { name: 'Sunrise',  cream: '#FBF4EA', darkBrown: '#353535', darkGreen: '#F16925', rose: '#FDE8E9', accentPurple: '#A790EA', warmSection: '#FFEBC6' },
+    { name: 'Bloom',    cream: '#FDF4F1', darkBrown: '#3A2A28', darkGreen: '#E8636F', rose: '#FDEAE7', accentPurple: '#6FAE82', warmSection: '#FBE3DC' },
+    { name: 'Citrus',   cream: '#FBF3E6', darkBrown: '#332B1C', darkGreen: '#DC8A2E', rose: '#FCEBD2', accentPurple: '#379C90', warmSection: '#F7E6C4' },
+    { name: 'Lavande',  cream: '#F8F5FD', darkBrown: '#2C2438', darkGreen: '#8C6FCB', rose: '#F1ECFB', accentPurple: '#F0955C', warmSection: '#EDE6FA' },
+    { name: 'Sage',     cream: '#F3F7F1', darkBrown: '#22302A', darkGreen: '#4F7A63', rose: '#E9F1EC', accentPurple: '#E0956B', warmSection: '#E4EDE1' },
+    { name: 'Berry',    cream: '#FBF1F5', darkBrown: '#331C28', darkGreen: '#B25583', rose: '#F7E7EE', accentPurple: '#E8B44A', warmSection: '#F5E3D6' }
+  ];
+
+  var root = document.documentElement;
+  var toggle = document.querySelector('.mood-toggle');
+  var currentIndex = -1;
+
+  function applyPalette(index) {
+    var p = PALETTES[index];
+    root.style.setProperty('--cream', p.cream);
+    root.style.setProperty('--dark-brown', p.darkBrown);
+    root.style.setProperty('--dark-green', p.darkGreen);
+    root.style.setProperty('--rose', p.rose);
+    root.style.setProperty('--accent-purple', p.accentPurple);
+    root.style.setProperty('--warm-section', p.warmSection);
+    root.style.setProperty('--blush-section', p.warmSection);
+    currentIndex = index;
+    if (toggle) toggle.title = 'Ambiance actuelle : ' + p.name + ' — clique pour changer';
+  }
+
+  function shuffle() {
+    var next;
+    do {
+      next = Math.floor(Math.random() * PALETTES.length);
+    } while (next === currentIndex && PALETTES.length > 1);
+    applyPalette(next);
+    try { localStorage.setItem(STORAGE_KEY, String(next)); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  if (saved !== null && PALETTES[+saved]) applyPalette(+saved);
+
+  if (toggle) toggle.addEventListener('click', shuffle);
 })();
 </script>
 </body>
