@@ -90,8 +90,8 @@
       width: 100%;
       max-width: 1440px;
       z-index: 100;
-      background: var(--cream);
-      box-shadow: 0 1px 0 rgba(35, 20, 9, 0.07), 0 2px 12px rgba(35, 20, 9, 0.05);
+      background: var(--dark-green);
+      transition: background-color 550ms ease;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -141,34 +141,30 @@
     .mood-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 0;
       height: 42px;
-      padding: 0 18px 0 14px;
+      padding: 0 22px;
       border-radius: 100px;
-      border: 1.5px solid rgba(35, 20, 9, 0.16);
-      background: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      background: var(--dark-brown);
       cursor: pointer;
       flex-shrink: 0;
       font-family: var(--sans);
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--dark-brown);
+      color: #fff;
       white-space: nowrap;
       transition: transform 220ms var(--ease-out-quart), box-shadow 220ms var(--ease-out-quart), border-color 220ms ease, background 220ms ease;
     }
     .mood-toggle:hover {
-      border-color: rgba(35, 20, 9, 0.32);
-      box-shadow: 0 6px 18px rgba(35, 20, 9, 0.14);
       transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(35, 20, 9, 0.22);
     }
-    .mood-toggle:focus-visible { outline-offset: 3px; }
-    .mood-toggle-dots {
-      display: inline-flex;
-      flex-shrink: 0;
-    }
-    .mood-toggle-dots circle { transition: fill 300ms ease; }
+    .mood-toggle:focus-visible { outline-color: #fff; outline-offset: 3px; }
+    .mood-toggle-dots { display: none; }
     .mood-toggle.is-shuffling { animation: mood-bounce 650ms var(--ease-out-quart); }
     .mood-toggle.is-shuffling .mood-toggle-dots { animation: mood-spin 650ms var(--ease-out-quart); }
     @keyframes mood-bounce {
@@ -302,7 +298,7 @@
     }
     .hero-badge {
       position: absolute;
-      top: 36px;
+      bottom: 36px;
       right: 36px;
       width: 130px;
       height: 130px;
@@ -853,7 +849,8 @@
       }
       .nav-actions { width: auto; margin-right: 10px; }
       .mood-toggle-label { display: none; }
-      .mood-toggle { padding: 0; width: 42px; justify-content: center; gap: 0; }
+      .mood-toggle { padding: 0; width: 42px; justify-content: center; gap: 0; background: #fff; border-color: rgba(35, 20, 9, 0.16); }
+      .mood-toggle-dots { display: inline-flex; }
       .nav-hamburger { display: flex; }
       .nav-links {
         display: none;
@@ -910,7 +907,7 @@
       .hero-sub { font-size: 16px; max-width: none; margin-bottom: 32px; }
       .hero-ctas { flex-wrap: wrap; gap: 14px; }
       .hero-right { height: 65vw; min-height: 240px; }
-      .hero-badge { width: 88px; height: 88px; top: 18px; right: 18px; }
+      .hero-badge { width: 88px; height: 88px; bottom: 18px; right: 18px; }
       .hero-sunburst { width: 220px; height: 220px; left: -110px; bottom: -110px; }
 
       /* Sections common */
@@ -1028,7 +1025,7 @@
 <section class="hero">
   <div class="hero-left">
     <img class="hero-sunburst" src="images/sunburst.svg" alt="" aria-hidden="true">
-    <p class="hero-location">Mons &mdash; <em>Grands Prés</em></p>
+    <p class="hero-location">Mons - <em>Grands Prés</em></p>
     <h1 class="hero-title">Good inside.<br>Glowing outside.</h1>
     <p class="hero-sub">Une expérience où prendre soin de soi devient un moment de plaisir — café, wellness et beauté, ensemble.</p>
     <div class="hero-ctas">
