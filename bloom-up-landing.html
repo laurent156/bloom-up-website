@@ -688,8 +688,11 @@
       object-fit: cover;
       display: block;
     }
-    /* Signals that an item has something to reveal. */
-    .js-loaded .menu-item[data-preview] .menu-item-name { cursor: help; }
+    /* The photo becomes the pointer, so the arrow is hidden — but only while
+       the photo is actually on screen. Tying this to hover instead would leave
+       a cursor-less dead zone if an image ever failed to load. The class is
+       only ever added on desktop pointers, so no media query is needed. */
+    .menu-item.is-previewing { cursor: none; }
 
     /* Voir plus */
     .menu-more {
@@ -1565,7 +1568,11 @@
     </div>
   </div>
 
-  <div class="carte-slider">
+  <!-- data-preview-default: placeholder shown for every item that has no photo
+       of its own. TEMPORARY — one shot standing in for all 29 drinks. Add real
+       photography with data-preview="<path>" on individual .menu-item elements
+       (that overrides this), then delete this attribute once all are covered. -->
+  <div class="carte-slider" data-preview-default="images/Collagène drinks.webp">
     <div class="carte-track">
 
       <!-- CARTE 1 : Boissons Collagène -->
@@ -1588,10 +1595,7 @@
               <div class="menu-item-row"><span class="menu-item-name">Golden Bloom</span><span class="menu-item-price">9,50€</span></div>
               <p class="menu-item-desc">Golden latte, curcuma, collagène, lait de coco.</p>
             </div>
-            <!-- data-preview: stand-in only. This is the Concept section's
-                 matcha photo, plausible for a matcha drink but not a shot of
-                 this drink. Swap for the real product photo. -->
-            <div class="menu-item" data-preview="images/Collagène drinks.webp">
+            <div class="menu-item">
               <div class="menu-item-row"><span class="menu-item-name">Skin Fog</span><span class="menu-item-price">9,50€</span></div>
               <p class="menu-item-desc">Matcha cérémonial, collagène, lait d'amande, mousse de miel.</p>
             </div>
@@ -1709,8 +1713,7 @@
               <div class="menu-item-row"><span class="menu-item-name">Cold Brew</span><span class="menu-item-price">5,00€</span></div>
               <p class="menu-item-desc">Infusion à froid 18h, servie sur glace, douce et ronde.</p>
             </div>
-            <!-- data-preview: stand-in only, same matcha photo. Replace. -->
-            <div class="menu-item" data-preview="images/Collagène drinks.webp">
+            <div class="menu-item">
               <div class="menu-item-row"><span class="menu-item-name">Matcha Latte</span><span class="menu-item-price">5,50€</span></div>
               <p class="menu-item-desc">Matcha cérémonial japonais, lait vapeur au choix.</p>
             </div>
@@ -1888,10 +1891,17 @@
      first hover; preloading 29 of them would tax the initial page load. */
   (function () {
     var mq = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1024px)');
-    var items = document.querySelectorAll('.menu-item[data-preview]');
+    /* A slider-level default covers every item; data-preview on an individual
+       item overrides it. So real photos can be dropped in one at a time while
+       the rest keep showing the placeholder. */
+    var slider = document.querySelector('.carte-slider');
+    var fallbackSrc = slider ? slider.getAttribute('data-preview-default') : null;
+    var items = document.querySelectorAll(
+      fallbackSrc ? '.carte-slider .menu-item' : '.menu-item[data-preview]'
+    );
     if (!items.length) return;
 
-    var preview = null, previewImg = null, armed = false;
+    var preview = null, previewImg = null, armed = false, activeItem = null;
     var rafPending = false, cursorX = 0, cursorY = 0;
     var OFFSET = 24, MARGIN = 8;
 
@@ -1904,6 +1914,8 @@
       previewImg = document.createElement('img');
       previewImg.alt = '';
       previewImg.decoding = 'async';
+      /* A missing photo must not leave a hidden cursor over dead space. */
+      previewImg.addEventListener('error', hide);
       inner.appendChild(previewImg);
       preview.appendChild(inner);
       document.body.appendChild(preview);
@@ -1936,7 +1948,7 @@
       /* Re-checked on every hover, not just at arm time: the listeners stay
          attached once added, so a window shrunk below desktop must not fire. */
       if (!mq.matches) return;
-      var src = item.getAttribute('data-preview');
+      var src = item.getAttribute('data-preview') || fallbackSrc;
       if (!src) return;
       if (!preview) build();
       if (previewImg.getAttribute('src') !== src) previewImg.setAttribute('src', src);
@@ -1944,10 +1956,17 @@
       cursorY = e.clientY;
       place();
       preview.classList.add('is-visible');
+      /* Hides the arrow so the photo reads as the pointer. */
+      activeItem = item;
+      item.classList.add('is-previewing');
     }
 
     function hide() {
       if (preview) preview.classList.remove('is-visible');
+      if (activeItem) {
+        activeItem.classList.remove('is-previewing');
+        activeItem = null;
+      }
     }
 
     function arm() {
