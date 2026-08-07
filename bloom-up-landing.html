@@ -71,6 +71,11 @@
       --nude-img: #8B6565;       /* rituel image fallback */
       --menu-sep-color: #E8E0D8;
       --menu-border: #F0EBE4;
+      /* Deeper brown than --dark-brown; the design uses both. Menu item names,
+         prices and category titles, plus the Espace body copy. */
+      --deep-brown: #39190F;
+      /* Menu item descriptions — stronger than the pale --rose surface tint. */
+      --rose-text: #DF90A6;
       --display: 'Skinova', Georgia, serif;
       --serif: 'PlayfairDisplay', Georgia, serif;
       --playfair: 'Playfair', 'PlayfairDisplay', Georgia, serif;
@@ -514,32 +519,41 @@
     /* ─── CARTE ─── */
     #carte {
       background: var(--warm-section);
-      padding: 100px var(--page-x);
+      padding: 72px var(--page-x) 80px;
     }
     .carte-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
     }
     .carte-nav {
       display: flex;
-      gap: 10px;
+      gap: 13px;
     }
     .carte-nav button {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: 1.5px solid var(--dark-brown);
       background: transparent;
       cursor: pointer;
-      font-size: 17px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--dark-brown);
       transition: background 0.2s, color 0.2s;
     }
+    /* Reuses the committed arrow asset as a mask so it inherits the button's
+       colour and flips to white on hover. */
+    .carte-nav-icon {
+      width: 18px;
+      height: 18px;
+      background-color: currentColor;
+      -webkit-mask: url('images/arrow-discover.svg') center / contain no-repeat;
+      mask: url('images/arrow-discover.svg') center / contain no-repeat;
+    }
+    .carte-prev .carte-nav-icon { transform: rotate(180deg); }
     .carte-nav button:hover {
       background: var(--dark-brown);
       color: #fff;
@@ -557,8 +571,8 @@
     }
     .menu-card {
       background: #fff;
-      border-radius: 18px;
-      padding: 52px 60px;
+      border-radius: 15px;
+      padding: 32px 28px;
       flex: 0 0 100%;
       min-width: 0;
     }
@@ -566,19 +580,28 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
     .menu-cat-title {
-      font-family: 'PlayfairDisplay', Georgia, serif;
-      font-size: 28px;
+      font-family: var(--playfair);
+      font-size: clamp(22px, 3.2vw, 34px);
       font-weight: 400;
+      line-height: 1.27;
+      letter-spacing: 0.02em;
+      color: var(--deep-brown);
     }
+    /* Figma sizes it 37px tall with 30px of horizontal padding, which yields
+       both the 174px "Spécialités" pill and the 238px one in Rituel. Those
+       exact values land in the ≥1024 block; smaller screens stay compact. */
     .badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       padding: 6px 18px;
-      border-radius: 100px;
-      font-size: 11px;
-      letter-spacing: 0.04em;
+      border-radius: 30.5px;
+      font-family: var(--playfair);
+      font-size: clamp(13px, 1.8vw, 18px);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
     .badge-green {
       background: var(--accent-purple);
@@ -587,7 +610,7 @@
     .menu-grid {
       display: grid;
       grid-template-columns: 1fr 1px 1fr;
-      column-gap: 56px;
+      column-gap: 40px;
     }
     .menu-sep {
       background: var(--menu-sep-color);
@@ -597,27 +620,34 @@
       border-bottom: 1px solid var(--menu-border);
     }
     .menu-item:last-child { border-bottom: none; }
+    /* Price sits flush right here; the ≥1024 block adds the trailing space
+       that parks it short of the column edge, as the design does. */
     .menu-item-row {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: baseline;
       margin-bottom: 4px;
     }
     .menu-item-name {
-      font-family: 'PlayfairDisplay', Georgia, serif;
-      font-size: 19px;
-      font-weight: 500;
+      font-family: var(--playfair);
+      font-size: clamp(18px, 2.4vw, 24px);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--deep-brown);
     }
     .menu-item-price {
-      font-family: 'PlayfairDisplay', Georgia, serif;
-      font-size: 16px;
-      font-weight: 400;
+      font-family: var(--playfair);
+      font-size: clamp(15px, 1.9vw, 19px);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--deep-brown);
+      justify-self: end;
     }
     .menu-item-desc {
-      font-size: 12px;
-      color: var(--dark-brown);
-      opacity: 0.6;
-      line-height: 1.45;
+      font-size: clamp(13px, 1.5vw, 15px);
+      color: var(--rose-text);
+      letter-spacing: 0.09em;
+      line-height: 1.37;
     }
     /* Voir plus */
     .menu-more {
@@ -975,6 +1005,44 @@
         height: calc(37 * var(--u));
         font-size: max(12px, calc(23 * var(--u)));
         bottom: calc(24 * var(--u));
+      }
+
+      /* ── Carte section (Figma node 22:1772, 1920×1086) ── */
+      #carte { padding: calc(107 * var(--u)) var(--page-x) calc(149 * var(--u)); }
+      .carte-header { margin-bottom: calc(53 * var(--u)); }
+      .carte-nav { gap: calc(13 * var(--u)); }
+      /* Floored at 48px: proportional scaling would shrink the control below
+         the 44px minimum touch target on narrower desktops. */
+      .carte-nav button {
+        width: max(48px, calc(67 * var(--u)));
+        height: max(48px, calc(67 * var(--u)));
+      }
+      .carte-nav-icon {
+        width: max(18px, calc(24 * var(--u)));
+        height: max(18px, calc(24 * var(--u)));
+      }
+      .menu-card {
+        border-radius: calc(15 * var(--u));
+        padding: calc(54 * var(--u)) calc(68 * var(--u)) calc(69 * var(--u));
+      }
+      .menu-card-top {
+        gap: calc(50 * var(--u));
+        margin-bottom: calc(25 * var(--u));
+      }
+      .menu-cat-title { font-size: max(26px, calc(48 * var(--u))); }
+      .badge {
+        height: calc(37 * var(--u));
+        padding: 0 calc(30 * var(--u));
+        font-size: max(14px, calc(23 * var(--u)));
+      }
+      .menu-grid { column-gap: calc(68 * var(--u)); }
+      /* Trailing space that keeps the price short of the column edge. */
+      .menu-item-row { padding-right: calc(107 * var(--u)); }
+      .menu-item-name { font-size: max(20px, calc(32 * var(--u))); }
+      .menu-item-price { font-size: max(15px, calc(24 * var(--u))); }
+      .menu-item-desc {
+        font-size: max(13px, calc(18 * var(--u)));
+        max-width: calc(455 * var(--u));
       }
     }
 
@@ -1450,8 +1518,8 @@
   <div class="carte-header">
     <p class="section-label">La Carte</p>
     <div class="carte-nav">
-      <button class="carte-prev" aria-label="Précédent" disabled>←</button>
-      <button class="carte-next" aria-label="Suivant">→</button>
+      <button class="carte-prev" aria-label="Précédent" disabled><span class="carte-nav-icon" aria-hidden="true"></span></button>
+      <button class="carte-next" aria-label="Suivant"><span class="carte-nav-icon" aria-hidden="true"></span></button>
     </div>
   </div>
 
