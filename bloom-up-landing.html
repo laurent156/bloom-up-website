@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Bloom Up — Collagen Café & Beauty</title>
-  <link rel="preload" as="image" href="images/image header.webp" type="image/webp">
+  <link rel="preload" as="image" href="images/hero-photo.webp" type="image/webp">
   <style>
     @font-face {
       font-family: 'Skinova';
@@ -30,13 +30,37 @@
       font-style: normal;
       font-display: swap;
     }
+    /* Source Sans 3 — variable, matches the Figma spec and provides REAL
+       semibold + italic cuts (the browser was faking both before). */
+    @font-face {
+      font-family: 'SourceSans3';
+      src: url('assets/fonts/SourceSans3.woff2') format('woff2');
+      font-weight: 200 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SourceSans3';
+      src: url('assets/fonts/SourceSans3-Italic.woff2') format('woff2');
+      font-weight: 200 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    /* Playfair — distinct family from Playfair Display; used by the marquee. */
+    @font-face {
+      font-family: 'Playfair';
+      src: url('assets/fonts/Playfair.woff2') format('woff2');
+      font-weight: 300 900;
+      font-style: normal;
+      font-display: swap;
+    }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --cream: #FBF4EA;
       --dark-brown: #353535;
-      --dark-green: #F16925;     /* brand orange — hero/ticker/footer surface */
+      --dark-green: #F26925;     /* brand orange — hero/ticker/footer surface */
       --rose: #FDE8E9;           /* light text on orange surfaces */
       --accent-purple: #A790EA; /* badges */
       /* Section surface tokens */
@@ -49,9 +73,17 @@
       --menu-border: #F0EBE4;
       --display: 'Skinova', Georgia, serif;
       --serif: 'PlayfairDisplay', Georgia, serif;
-      --sans: 'SourceSansPro', system-ui, sans-serif;
+      --playfair: 'Playfair', 'PlayfairDisplay', Georgia, serif;
+      --sans: 'SourceSans3', 'SourceSansPro', system-ui, sans-serif;
       --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      /* Horizontal page margin. Figma frames the whole page at ~99px;
+         stays 56px below 1024px so the existing mobile rules keep working. */
+      --page-x: 56px;
+      /* Fluid unit: 1px at a 1920px viewport (the Figma artboard width),
+         scaling down proportionally to 1024px. Multiply a Figma pixel value
+         by this to get its responsive equivalent: calc(146 * var(--u)). */
+      --u: 1px;
     }
 
     html { scroll-behavior: smooth; }
@@ -91,7 +123,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 56px;
+      padding: 22px var(--page-x);
     }
     nav.nav-scrolled, nav.nav-open {
       background: var(--dark-green);
@@ -109,27 +141,20 @@
       font-weight: 400;
     }
     .nav-links a:hover { opacity: 0.6; }
+    /* Figma's own lockup, exported as SVG — its letterspacing can't be
+       reproduced with live text. White fill; every shuffle palette keeps a
+       dark surface behind the nav, so it stays legible. */
     .nav-logo {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      text-align: center;
-      line-height: 1;
+      width: 136px;
+      line-height: 0;
     }
-    .nav-logo-name {
-      font-family: 'Skinova', Georgia, serif;
-      font-size: 34px;
-      font-weight: normal;
+    .nav-logo img {
       display: block;
-    }
-    .nav-logo-sub {
-      font-family: var(--sans);
-      font-size: 8.5px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      opacity: 0.7;
-      display: block;
-      margin-top: 2px;
+      width: 100%;
+      height: auto;
     }
     .nav-actions {
       width: 260px;
@@ -144,7 +169,7 @@
       gap: 0;
       height: 42px;
       padding: 0 22px;
-      border-radius: 100px;
+      border-radius: 37px;
       border: 1.5px solid rgba(255, 255, 255, 0.22);
       background: var(--dark-brown);
       cursor: pointer;
@@ -206,19 +231,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 60px 60px 60px 56px;
+      padding: 60px 60px 60px var(--page-x);
       background: var(--dark-green);
       color: #fff;
       overflow: hidden;
-    }
-    .hero-sunburst {
-      position: absolute;
-      left: -230px;
-      bottom: -230px;
-      width: 460px;
-      height: 460px;
-      z-index: -1;
-      pointer-events: none;
     }
     .hero-location {
       font-size: 24px;
@@ -227,28 +243,27 @@
       margin-bottom: 28px;
       font-weight: 400;
     }
+    /* Figma: MONS semibold, " - " regular, GRANDS PRÉS italic — all 24px caps. */
+    .hero-location strong { font-weight: 600; }
     .hero-location em {
       font-style: italic;
-      font-family: 'PlayfairDisplay', Georgia, serif;
-      font-size: 13px;
-      text-transform: none;
-      letter-spacing: 0.02em;
+      font-weight: 400;
     }
     .hero-title {
       font-family: 'Skinova', Georgia, serif;
-      font-size: clamp(60px, 7.6vw, 146px);
-      font-weight: 500;
-      line-height: 1.06;
+      font-size: clamp(60px, 6.5vw, 104px);
+      font-weight: 400;
+      line-height: 0.97;
       margin-bottom: 24px;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.01em;
       text-wrap: balance;
     }
     .hero-sub {
       font-size: 24px;
-      line-height: 1.5;
+      line-height: normal;
+      letter-spacing: 0.09em;
       max-width: 620px;
       margin-bottom: 40px;
-      opacity: 0.8;
     }
     .hero-ctas {
       display: flex;
@@ -258,24 +273,46 @@
     .btn-dark {
       background: var(--dark-brown);
       color: #fff;
-      padding: 14px 28px;
-      border-radius: 100px;
+      padding: 12px 27px 12px 36px;
+      border-radius: 37px;
       font-size: 16px;
       letter-spacing: 0.09em;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 400;
       text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+    }
+    /* The arrow is Figma's exported icon, rotated -45° as in the design.
+       Its box stays 24px so it never inflates the pill's height. */
+    /* Figma pulls the arrow 7px left, but against a 33.94px rotation box.
+       Our box is a tight 24px, so the equivalent visual overlap is ~2px. */
+    .btn-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-left: -2px;
+      flex-shrink: 0;
+    }
+    .btn-arrow img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform: rotate(-45deg);
     }
     .btn-ghost {
       font-size: 16px;
       letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: var(--dark-brown);
+      color: #000;
       background: #fff;
       text-decoration: none;
       font-weight: 400;
-      padding: 14px 24px;
-      border-radius: 100px;
+      padding: 12px 24px;
+      border-radius: 37px;
     }
     .btn-ghost:hover { opacity: 0.6; }
 
@@ -283,7 +320,6 @@
       position: relative;
       overflow: hidden;
       background: transparent;
-      padding: 120px 20.6% 34px 0;
     }
     .hero-right picture {
       display: block;
@@ -294,7 +330,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 65%;
+      object-position: center;
       display: block;
     }
     .hero-badge {
@@ -321,7 +357,7 @@
     /* ─── TICKER ─── */
     .ticker {
       background: var(--dark-green);
-      color: var(--rose);
+      color: #fff;
       padding: 20px 0;
       overflow: hidden;
       white-space: nowrap;
@@ -330,15 +366,17 @@
       display: inline-flex;
       animation: marquee 34s linear infinite;
     }
+    /* Figma uses "Playfair" here — a different family from the Playfair
+       Display on the shuffle button, with an optical-size axis. */
     .ticker-track span {
-      font-family: var(--serif);
+      font-family: var(--playfair);
+      font-variation-settings: 'opsz' 12, 'wdth' 100;
       font-size: 24px;
       letter-spacing: 0.09em;
       padding: 0 14px;
     }
     .ticker-track .dot {
-      color: var(--rose);
-      opacity: 0.7;
+      color: #fff;
       padding: 0 4px;
     }
     @keyframes marquee {
@@ -348,7 +386,7 @@
 
     /* ─── CONCEPT ─── */
     #concept {
-      padding: 100px 56px 0;
+      padding: 100px var(--page-x) 0;
     }
     .two-col {
       display: grid;
@@ -383,8 +421,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       height: 420px;
-      margin-left: -56px;
-      margin-right: -56px;
+      margin-left: calc(-1 * var(--page-x));
+      margin-right: calc(-1 * var(--page-x));
     }
     .photo-card {
       position: relative;
@@ -436,7 +474,7 @@
     /* ─── CARTE ─── */
     #carte {
       background: var(--warm-section);
-      padding: 100px 56px;
+      padding: 100px var(--page-x);
     }
     .carte-header {
       display: flex;
@@ -576,7 +614,7 @@
 
     /* ─── ESPACE ─── */
     #espace {
-      padding: 100px 56px 0;
+      padding: 100px var(--page-x) 0;
     }
     .espace-text {
       font-size: 14px;
@@ -588,8 +626,8 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       height: 380px;
-      margin-left: -56px;
-      margin-right: -56px;
+      margin-left: calc(-1 * var(--page-x));
+      margin-right: calc(-1 * var(--page-x));
     }
     .espace-photos .photo-label {
       top: auto;
@@ -673,7 +711,7 @@
       background: var(--dark-green);
       color: var(--rose);
       text-align: center;
-      padding: 80px 56px 60px;
+      padding: 80px var(--page-x) 60px;
     }
     .footer-pre {
       font-size: 14px;
@@ -726,7 +764,9 @@
     .hero-title    { animation: bu-up 720ms var(--ease-out-expo) 330ms both; }
     .hero-sub      { animation: bu-up 600ms var(--ease-out-quart) 510ms both; }
     .hero-ctas     { animation: bu-up 500ms var(--ease-out-quart) 640ms both; }
-    .hero-right > img { animation: bu-scale-in 1000ms var(--ease-out-quart) 0ms both; }
+    /* Targets <picture>, not <img> — the img is wrapped, so the old
+       `.hero-right > img` selector never matched and this never animated. */
+    .hero-right picture { animation: bu-scale-in 1000ms var(--ease-out-quart) 0ms both; }
     .hero-badge-svg   { animation: spin 20s linear infinite, bu-fade 400ms ease 820ms both; }
 
     /* ─── BUTTON MICRO-INTERACTIONS ─── */
@@ -835,10 +875,141 @@
       transform: translateY(-7px) rotate(-45deg);
     }
 
-    /* ─── HERO SUNBURST — narrower desktop/tablet widths need less reach
-       since hero height stays fixed while the text wraps onto more lines ─── */
-    @media (max-width: 1300px) {
-      .hero-sunburst { width: 380px; height: 380px; left: -190px; bottom: -190px; }
+    /* ─── DESKTOP — FIGMA GEOMETRY (≥1440px) ────────────────────────────
+       Everything below mirrors the Figma header frame (node 3:2, 1920×1098)
+       one-to-one. Figma pixel values are multiplied by --u, a unit worth 1px
+       at a 1920px viewport, so the layout keeps its exact proportions as the
+       window narrows and freezes at the designed size above 1920px.
+
+       Why 1440px and not 1024px: this layout scales type with the viewport,
+       and below 1440 that would push the nav links under 12px — unreadable.
+       So 1024–1439 keeps the previous flow layout, which sizes text
+       independently of the composition. Mobile rules stay untouched. */
+    @media (min-width: 1440px) {
+      :root {
+        --u: clamp(0.75px, 100vw / 1920, 1px);
+        --page-x: calc(99 * var(--u));
+      }
+
+      /* Nav Bar — frame 1920×118, pt-55 px-99, items centred in the
+         remaining 63px. That maths puts the links at y=75 and the shuffle
+         button at y=64, exactly as in Figma. */
+      nav {
+        height: calc(118 * var(--u));
+        padding: calc(55 * var(--u)) var(--page-x) 0;
+        align-items: center;
+      }
+      .nav-links { gap: calc(45 * var(--u)); }
+      .nav-links a { font-size: calc(16 * var(--u)); }
+      .nav-logo {
+        top: calc(55 * var(--u));
+        width: calc(199 * var(--u));
+      }
+      .nav-actions { width: auto; }
+      .mood-toggle {
+        height: auto;
+        padding: calc(12 * var(--u)) calc(27 * var(--u));
+        border: none;
+        border-radius: calc(37 * var(--u));
+        font-size: calc(16 * var(--u));
+      }
+
+      /* Hero — absolute geometry, as in the frame. No column split: the text
+         and the photo are independently placed boxes. */
+      .hero {
+        display: block;
+        position: relative;
+        height: calc(969 * var(--u));
+      }
+      /* Figma's Hero Text runs from x=99 to the page edge (width 1821), so
+         anchor both sides rather than setting a width — a vw-derived width
+         would overshoot by the scrollbar and spill 15px off-canvas. */
+      .hero-left {
+        position: absolute;
+        left: var(--page-x);
+        right: 0;
+        top: calc(337 * var(--u));
+        display: block;
+        padding: 0;
+        background: none;
+        overflow: visible;
+      }
+      .hero-location {
+        font-size: calc(24 * var(--u));
+        margin-bottom: calc(14 * var(--u));
+      }
+      .hero-title {
+        font-size: calc(146 * var(--u));
+        margin-bottom: calc(14 * var(--u));
+        text-wrap: initial;
+      }
+      .hero-sub {
+        font-size: calc(24 * var(--u));
+        width: calc(717 * var(--u));
+        max-width: none;
+        margin-bottom: calc(46 * var(--u));
+      }
+      .hero-ctas { gap: calc(15 * var(--u)); }
+      .btn-dark,
+      .btn-ghost {
+        height: calc(47 * var(--u));
+        font-size: calc(16 * var(--u));
+        border-radius: calc(37 * var(--u));
+        display: inline-flex;
+        align-items: center;
+      }
+      .btn-dark { padding: 0 calc(27 * var(--u)) 0 calc(36 * var(--u)); }
+      .btn-ghost { padding: 0 calc(24 * var(--u)); }
+      .btn-arrow {
+        width: calc(24 * var(--u));
+        height: calc(24 * var(--u));
+        margin-left: calc(-2 * var(--u));
+      }
+
+      /* Photo — 650×770 with a 43px radius, 158px from the right edge.
+         overflow stays visible so the badge can spill past its corner; the
+         clipping and rounding live on <picture> instead. */
+      .hero-right {
+        position: absolute;
+        top: calc(164 * var(--u));
+        right: calc(158 * var(--u));
+        width: calc(650 * var(--u));
+        height: calc(770 * var(--u));
+        overflow: visible;
+      }
+      .hero-right picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: calc(43 * var(--u));
+        overflow: hidden;
+      }
+      /* Badge sits at 1641,667 on the page — i.e. 80px past the photo's
+         right edge and 66px above its bottom. */
+      .hero-badge {
+        right: calc(-80 * var(--u));
+        bottom: calc(66 * var(--u));
+        width: calc(201 * var(--u));
+        height: calc(201 * var(--u));
+      }
+
+      /* Marquee bar — 86px tall, white Playfair at 24px. */
+      .ticker {
+        height: calc(86 * var(--u));
+        display: flex;
+        align-items: center;
+        padding: 0;
+      }
+      .ticker-track span { font-size: calc(24 * var(--u)); }
+    }
+
+    /* ─── MID DESKTOP (1024–1439px) ───
+       The Figma-sized nav links (16px / 45px gaps) are too wide to clear the
+       centred logo at these widths — INFOS ended up underneath it. Tighten
+       them just for this band; ≥1440px scales them proportionally instead. */
+    @media (min-width: 1024px) and (max-width: 1439px) {
+      .nav-links { gap: 32px; }
+      .nav-links a { font-size: 13px; }
     }
 
     /* ─── TABLET + MOBILE NAV (≤1023px) ─── */
@@ -848,11 +1019,15 @@
         padding: 16px 36px;
         flex-wrap: wrap;
       }
+      /* flex: 1 would stretch the SVG logo to fill the row (the old live-text
+         logo had an intrinsic size, so it didn't). Pin an explicit width. */
       .nav-logo {
         position: static;
         transform: none;
         left: auto;
-        flex: 1;
+        top: auto;
+        flex: 0 0 auto;
+        width: 128px;
         text-align: left;
       }
       .nav-actions { width: auto; margin-right: 10px; }
@@ -901,7 +1076,7 @@
     @media (max-width: 767px) {
       /* Nav overrides for mobile */
       nav { padding: 14px 24px; }
-      .nav-logo-name { font-size: 26px; }
+      .nav-logo { width: 108px; }
       .nav-links a { font-size: 12px; letter-spacing: 0.12em; }
 
       /* Hero */
@@ -916,7 +1091,6 @@
       .hero-ctas { flex-wrap: wrap; gap: 14px; }
       .hero-right { height: 65vw; min-height: 240px; }
       .hero-badge { width: 88px; height: 88px; bottom: 18px; right: 18px; }
-      .hero-sunburst { width: 220px; height: 220px; left: -110px; bottom: -110px; }
 
       /* Sections common */
       #concept { padding: 64px 24px 0; }
@@ -1011,8 +1185,7 @@
     <a href="#infos">Infos</a>
   </div>
   <div class="nav-logo">
-    <span class="nav-logo-name">Bloom Up</span>
-    <span class="nav-logo-sub">Collagen Café &amp; Beauty</span>
+    <img src="images/logo-bloom-up.svg" alt="Bloom Up — Collagen Café &amp; Beauty" width="199" height="63">
   </div>
   <div class="nav-actions">
     <button class="mood-toggle" type="button" aria-label="Mélanger les couleurs du site" title="Mélanger les couleurs">
@@ -1032,19 +1205,18 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <img class="hero-sunburst" src="images/sunburst.svg" alt="" aria-hidden="true">
-    <p class="hero-location">Mons - <em>Grands Prés</em></p>
+    <p class="hero-location"><strong>Mons</strong> - <em>Grands Prés</em></p>
     <h1 class="hero-title">Good inside.<br>Glowing outside.</h1>
     <p class="hero-sub">Une expérience où prendre soin de soi devient un moment de plaisir — café, wellness et beauté, ensemble.</p>
     <div class="hero-ctas">
-      <a href="#concept" class="btn-dark">Découvrir ↗</a>
+      <a href="#concept" class="btn-dark">Découvrir<span class="btn-arrow"><img src="images/arrow-discover.svg" alt="" aria-hidden="true" width="24" height="24"></span></a>
       <a href="#infos" class="btn-ghost">Nous trouver</a>
     </div>
   </div>
   <div class="hero-right">
     <picture>
-      <source srcset="images/image header.webp" type="image/webp">
-      <img src="images/image header.png" alt="Comptoir Bloom Up, vase céramique coloré sur marbre" width="897" height="1065" fetchpriority="high">
+      <source srcset="images/hero-photo.webp" type="image/webp">
+      <img src="images/hero-photo.jpg" alt="Comptoir Bloom Up, vase céramique coloré sur marbre" width="650" height="770" fetchpriority="high">
     </picture>
     <!-- Badge circulaire -->
     <div class="hero-badge">
@@ -1573,7 +1745,7 @@
   var STORAGE_KEY = 'bloomup-palette';
   var CREAM = '#FBF4EA';
   var DARK = '#353535';
-  var ORANGE = '#F16925';
+  var ORANGE = '#F26925';
   var PURPLE = '#A790EA';
   var WARM = '#FFEBC6';
   var BLUSH = '#FDE8E9';
