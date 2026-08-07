@@ -649,6 +649,48 @@
       letter-spacing: 0.09em;
       line-height: 1.37;
     }
+    /* ─── MENU HOVER PREVIEW ───
+       A floating product shot that trails the cursor. Opt-in per item via
+       data-preview="<path>"; items without the attribute show nothing, so
+       photos can be added one at a time. Created by JS, hence .js-loaded.
+       Appended to <body> rather than inside the section so no ancestor can
+       become its containing block and clip it.
+       The outer element carries the cursor position (never transitioned, so
+       tracking stays smooth); the inner one carries the fade and scale. */
+    .menu-preview {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 90;               /* under the nav (100) */
+      pointer-events: none;
+      transform: translate3d(-9999px, -9999px, 0);
+      will-change: transform;
+    }
+    .menu-preview-inner {
+      width: 260px;
+      height: 300px;
+      border-radius: 15px;
+      overflow: hidden;
+      background: var(--nude-photo);
+      box-shadow: 0 18px 44px rgba(57, 25, 15, 0.26);
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 200ms var(--ease-out-quart),
+                  transform 260ms var(--ease-out-quart);
+    }
+    .menu-preview.is-visible .menu-preview-inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .menu-preview-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Signals that an item has something to reveal. */
+    .js-loaded .menu-item[data-preview] .menu-item-name { cursor: help; }
+
     /* Voir plus */
     .menu-more {
       overflow: hidden;
@@ -1546,7 +1588,10 @@
               <div class="menu-item-row"><span class="menu-item-name">Golden Bloom</span><span class="menu-item-price">9,50€</span></div>
               <p class="menu-item-desc">Golden latte, curcuma, collagène, lait de coco.</p>
             </div>
-            <div class="menu-item">
+            <!-- data-preview: stand-in only. This is the Concept section's
+                 matcha photo, plausible for a matcha drink but not a shot of
+                 this drink. Swap for the real product photo. -->
+            <div class="menu-item" data-preview="images/Collagène drinks.webp">
               <div class="menu-item-row"><span class="menu-item-name">Skin Fog</span><span class="menu-item-price">9,50€</span></div>
               <p class="menu-item-desc">Matcha cérémonial, collagène, lait d'amande, mousse de miel.</p>
             </div>
@@ -1664,7 +1709,8 @@
               <div class="menu-item-row"><span class="menu-item-name">Cold Brew</span><span class="menu-item-price">5,00€</span></div>
               <p class="menu-item-desc">Infusion à froid 18h, servie sur glace, douce et ronde.</p>
             </div>
-            <div class="menu-item">
+            <!-- data-preview: stand-in only, same matcha photo. Replace. -->
+            <div class="menu-item" data-preview="images/Collagène drinks.webp">
               <div class="menu-item-row"><span class="menu-item-name">Matcha Latte</span><span class="menu-item-price">5,50€</span></div>
               <p class="menu-item-desc">Matcha cérémonial japonais, lait vapeur au choix.</p>
             </div>
@@ -1835,6 +1881,92 @@
     window.addEventListener('scroll', updateNavScrolled, { passive: true });
     window.addEventListener('resize', updateNavScrolled);
   }
+
+  /* ── Menu hover preview (desktop pointers only) ──
+     Gated on (hover: hover) and (pointer: fine) as well as width, so a touch
+     screen never arms it — width alone would catch tablets. Images load on
+     first hover; preloading 29 of them would tax the initial page load. */
+  (function () {
+    var mq = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1024px)');
+    var items = document.querySelectorAll('.menu-item[data-preview]');
+    if (!items.length) return;
+
+    var preview = null, previewImg = null, armed = false;
+    var rafPending = false, cursorX = 0, cursorY = 0;
+    var OFFSET = 24, MARGIN = 8;
+
+    function build() {
+      preview = document.createElement('div');
+      preview.className = 'menu-preview';
+      preview.setAttribute('aria-hidden', 'true');  /* decorative: adds no information */
+      var inner = document.createElement('div');
+      inner.className = 'menu-preview-inner';
+      previewImg = document.createElement('img');
+      previewImg.alt = '';
+      previewImg.decoding = 'async';
+      inner.appendChild(previewImg);
+      preview.appendChild(inner);
+      document.body.appendChild(preview);
+    }
+
+    /* Flip to the other side of the cursor when the panel would leave the
+       viewport, so it stays fully visible near the edges. */
+    function place() {
+      rafPending = false;
+      if (!preview) return;
+      var w = preview.offsetWidth, h = preview.offsetHeight;
+      var x = cursorX + OFFSET, y = cursorY + OFFSET;
+      if (x + w > window.innerWidth - MARGIN) x = cursorX - w - OFFSET;
+      if (y + h > window.innerHeight - MARGIN) y = cursorY - h - OFFSET;
+      if (x < MARGIN) x = MARGIN;
+      if (y < MARGIN) y = MARGIN;
+      preview.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+    }
+
+    function onMove(e) {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(place);
+      }
+    }
+
+    function show(item, e) {
+      /* Re-checked on every hover, not just at arm time: the listeners stay
+         attached once added, so a window shrunk below desktop must not fire. */
+      if (!mq.matches) return;
+      var src = item.getAttribute('data-preview');
+      if (!src) return;
+      if (!preview) build();
+      if (previewImg.getAttribute('src') !== src) previewImg.setAttribute('src', src);
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      place();
+      preview.classList.add('is-visible');
+    }
+
+    function hide() {
+      if (preview) preview.classList.remove('is-visible');
+    }
+
+    function arm() {
+      if (armed) return;
+      armed = true;
+      items.forEach(function (item) {
+        item.addEventListener('mouseenter', function (e) { show(item, e); });
+        item.addEventListener('mouseleave', hide);
+        item.addEventListener('mousemove', onMove);
+      });
+    }
+
+    if (mq.matches) arm();
+    /* Arm late if the window grows into desktop; once armed the media query
+       still gates nothing, so also hide when leaving desktop. */
+    mq.addEventListener('change', function (ev) {
+      if (ev.matches) arm(); else hide();
+    });
+  })();
 
   /* ── Carousel carte ── */
   var track = document.querySelector('.carte-track');
