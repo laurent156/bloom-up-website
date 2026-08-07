@@ -71,7 +71,7 @@
       overflow-x: hidden;
     }
     /* ─── MOOD PALETTE TRANSITION ─── */
-    body, .hero-left, .ticker, footer, .badge-green, .badge-outline-green,
+    body, .hero, .hero-left, .ticker, footer, .badge-green, .badge-outline-green,
     .rituel-content, #carte, .footer-brand, .menu-item-desc {
       transition: background-color 550ms ease, color 550ms ease, border-color 550ms ease;
     }
@@ -98,7 +98,7 @@
     }
     .nav-links {
       display: flex;
-      gap: 36px;
+      gap: 45px;
     }
     .nav-links a {
       font-size: 16px;
@@ -198,6 +198,7 @@
       grid-template-columns: 3fr 2fr;
       height: 720px;
       margin-top: 0;
+      background: var(--dark-green);
     }
     .hero-left {
       position: relative;
@@ -252,7 +253,7 @@
     .hero-ctas {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 15px;
     }
     .btn-dark {
       background: var(--dark-brown);
@@ -281,7 +282,8 @@
     .hero-right {
       position: relative;
       overflow: hidden;
-      background: var(--nude-card);
+      background: transparent;
+      padding: 120px 20.6% 34px 0;
     }
     .hero-right picture {
       display: block;
@@ -329,8 +331,9 @@
       animation: marquee 34s linear infinite;
     }
     .ticker-track span {
-      font-size: 18px;
-      letter-spacing: 0.06em;
+      font-family: var(--serif);
+      font-size: 24px;
+      letter-spacing: 0.09em;
       padding: 0 14px;
     }
     .ticker-track .dot {
