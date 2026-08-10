@@ -1872,17 +1872,14 @@
     });
   }
 
-  /* Solid nav background once something other than the hero is behind it.
-     The threshold is the hero's height minus the nav's own height: any later
-     and the marquee scrolls behind a transparent nav, colliding with the
-     links. */
+  /* Solid nav background from the first scroll. Costs nothing visually over
+     the hero — the nav's solid colour is --dark-green, the hero's own orange,
+     so they match — while guaranteeing the links stay legible against whatever
+     scrolls underneath. The small threshold just avoids toggling on the
+     sub-pixel scroll positions a rubber-band bounce can report. */
   if (navEl) {
-    var heroEl = document.querySelector('.hero');
     function updateNavScrolled() {
-      var threshold = heroEl
-        ? Math.max(0, heroEl.offsetHeight - navEl.offsetHeight)
-        : 40;
-      navEl.classList.toggle('nav-scrolled', window.scrollY > threshold);
+      navEl.classList.toggle('nav-scrolled', window.scrollY > 8);
     }
     updateNavScrolled();
     window.addEventListener('scroll', updateNavScrolled, { passive: true });
