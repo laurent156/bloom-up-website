@@ -634,6 +634,10 @@
       font-weight: 600;
       letter-spacing: 0.05em;
       color: var(--deep-brown);
+      /* Shrinks the box to the text. As a grid item it would otherwise fill
+         the whole 1fr column, making the hover target far wider than the name
+         it is supposed to cover. */
+      justify-self: start;
     }
     .menu-item-price {
       font-family: var(--playfair);
@@ -692,7 +696,7 @@
        the photo is actually on screen. Tying this to hover instead would leave
        a cursor-less dead zone if an image ever failed to load. The class is
        only ever added on desktop pointers, so no media query is needed. */
-    .menu-item.is-previewing { cursor: none; }
+    .menu-item-name.is-previewing { cursor: none; }
 
     /* Voir plus */
     .menu-more {
@@ -1896,12 +1900,16 @@
        the rest keep showing the placeholder. */
     var slider = document.querySelector('.carte-slider');
     var fallbackSrc = slider ? slider.getAttribute('data-preview-default') : null;
-    var items = document.querySelectorAll(
-      fallbackSrc ? '.carte-slider .menu-item' : '.menu-item[data-preview]'
+    /* The name is the hover target, not the whole row: the price and the
+       description should not summon the photo. */
+    var triggers = document.querySelectorAll(
+      fallbackSrc
+        ? '.carte-slider .menu-item-name'
+        : '.menu-item[data-preview] .menu-item-name'
     );
-    if (!items.length) return;
+    if (!triggers.length) return;
 
-    var preview = null, previewImg = null, armed = false, activeItem = null;
+    var preview = null, previewImg = null, armed = false, activeTrigger = null;
     var rafPending = false, cursorX = 0, cursorY = 0;
     var OFFSET = 24, MARGIN = 8;
 
@@ -1944,11 +1952,12 @@
       }
     }
 
-    function show(item, e) {
+    function show(trigger, e) {
       /* Re-checked on every hover, not just at arm time: the listeners stay
          attached once added, so a window shrunk below desktop must not fire. */
       if (!mq.matches) return;
-      var src = item.getAttribute('data-preview') || fallbackSrc;
+      var item = trigger.closest('.menu-item');
+      var src = (item && item.getAttribute('data-preview')) || fallbackSrc;
       if (!src) return;
       if (!preview) build();
       if (previewImg.getAttribute('src') !== src) previewImg.setAttribute('src', src);
@@ -1957,25 +1966,25 @@
       place();
       preview.classList.add('is-visible');
       /* Hides the arrow so the photo reads as the pointer. */
-      activeItem = item;
-      item.classList.add('is-previewing');
+      activeTrigger = trigger;
+      trigger.classList.add('is-previewing');
     }
 
     function hide() {
       if (preview) preview.classList.remove('is-visible');
-      if (activeItem) {
-        activeItem.classList.remove('is-previewing');
-        activeItem = null;
+      if (activeTrigger) {
+        activeTrigger.classList.remove('is-previewing');
+        activeTrigger = null;
       }
     }
 
     function arm() {
       if (armed) return;
       armed = true;
-      items.forEach(function (item) {
-        item.addEventListener('mouseenter', function (e) { show(item, e); });
-        item.addEventListener('mouseleave', hide);
-        item.addEventListener('mousemove', onMove);
+      triggers.forEach(function (trigger) {
+        trigger.addEventListener('mouseenter', function (e) { show(trigger, e); });
+        trigger.addEventListener('mouseleave', hide);
+        trigger.addEventListener('mousemove', onMove);
       });
     }
 
