@@ -733,19 +733,27 @@
     .menu-voir-plus.open .vp-chevron { transform: rotate(180deg); }
 
     /* ─── ESPACE ─── */
+    /* --rose is #FDE8E9, exactly the design's surface here. Note --blush-section
+       exists for a blush surface but currently holds the warm value; Rituel
+       depends on it, so it is left alone until that section is done. */
     #espace {
-      padding: 100px var(--page-x) 0;
+      background: var(--rose);
+      padding: 72px var(--page-x) 0;
     }
     .espace-text {
-      font-size: 14px;
-      line-height: 1.75;
-      max-width: 500px;
-      opacity: 0.85;
+      font-size: clamp(14px, 1.6vw, 16px);
+      line-height: normal;
+      letter-spacing: 0.09em;
+      color: var(--deep-brown);
+      max-width: 454px;
     }
+    /* Full-bleed row of four, with the design's 13px gutters letting the blush
+       surface show between the cards. */
     .espace-photos {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      height: 380px;
+      gap: 13px;
+      height: clamp(320px, 34vw, 480px);
       margin-left: calc(-1 * var(--page-x));
       margin-right: calc(-1 * var(--page-x));
     }
@@ -1054,7 +1062,26 @@
         width: calc(242 * var(--u));
         height: calc(37 * var(--u));
         font-size: max(12px, calc(23 * var(--u)));
-        bottom: calc(24 * var(--u));
+        bottom: calc(58 * var(--u));
+      }
+
+      /* ── Espace section (Figma node 25:116, 1920×1012) ──
+         Header at y=92, gallery at y=365 running to the bottom edge.
+         Kept in this media query because `#espace .two-col` outweighs the
+         mobile single-column rule on specificity alone. */
+      #espace { padding-top: calc(92 * var(--u)); }
+      #espace .two-col {
+        grid-template-columns: max-content calc(454 * var(--u));
+        gap: calc(99 * var(--u));
+        margin-bottom: calc(98 * var(--u));
+      }
+      .espace-text {
+        font-size: max(13px, calc(18 * var(--u)));
+        max-width: none;
+      }
+      .espace-photos {
+        height: calc(647 * var(--u));
+        gap: calc(13 * var(--u));
       }
 
       /* ── Carte section (Figma node 22:1772, 1920×1086) ── */
@@ -1539,7 +1566,7 @@
   <div class="concept-photos">
     <div class="photo-card">
       <picture>
-        <source srcset="images/328e2535458a34b4287e57846c54885f 1.webp" type="image/webp">
+        <source srcset="images/328e2535458a34b4287e57846c54885f%201.webp" type="image/webp">
         <img src="images/328e2535458a34b4287e57846c54885f 1.png" alt="Café premium servi au comptoir Bloom Up" width="641" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Café premium</div>
@@ -1547,7 +1574,7 @@
     </div>
     <div class="photo-card">
       <picture>
-        <source srcset="images/Collagène drinks.webp" type="image/webp">
+        <source srcset="images/Collagène%20drinks.webp" type="image/webp">
         <img src="images/Collagène drinks.png" alt="Boissons au collagène colorées dans des verres élancés" width="639" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Collagène drinks</div>
@@ -1555,7 +1582,7 @@
     </div>
     <div class="photo-card">
       <picture>
-        <source srcset="images/Masque led.webp" type="image/webp">
+        <source srcset="images/Masque%20led.webp" type="image/webp">
         <img src="images/Masque led.png" alt="Masque LED luminothérapie pour soin de la peau" width="640" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Masques LED</div>
@@ -1748,28 +1775,28 @@
   <div class="espace-photos">
     <div class="photo-card">
       <picture>
-        <source srcset="images/Mask group.webp" type="image/webp">
+        <source srcset="images/Mask%20group.webp" type="image/webp">
         <img src="images/Mask group.png" alt="Espace cocooning Bloom Up, ambiance douce et feutrée" width="482" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Espace cocooning</div>
     </div>
     <div class="photo-card">
       <picture>
-        <source srcset="images/Mask group-1.webp" type="image/webp">
+        <source srcset="images/Mask%20group-1.webp" type="image/webp">
         <img src="images/Mask group-1.png" alt="Deux entrées depuis la galerie des Grands Prés" width="482" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Deux entrées</div>
     </div>
     <div class="photo-card">
       <picture>
-        <source srcset="images/Mask group-2.webp" type="image/webp">
+        <source srcset="images/Mask%20group-2.webp" type="image/webp">
         <img src="images/Mask group-2.png" alt="Accès facile au centre commercial" width="482" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Accès facile</div>
     </div>
     <div class="photo-card">
       <picture>
-        <source srcset="images/Mask group-3.webp" type="image/webp">
+        <source srcset="images/Mask%20group-3.webp" type="image/webp">
         <img src="images/Mask group-3.png" alt="Wifi gratuit disponible dans l'espace" width="433" height="647" loading="lazy">
       </picture>
       <div class="photo-label">Wifi gratuit</div>
@@ -1781,7 +1808,7 @@
 <section id="rituel">
   <div class="rituel-img">
     <picture>
-      <source srcset="images/Pose toi.webp" type="image/webp">
+      <source srcset="images/Pose%20toi.webp" type="image/webp">
       <img src="images/Pose toi.png" alt="Personne installée avec un masque LED luminothérapie" width="910" height="1004" loading="lazy">
     </picture>
   </div>
