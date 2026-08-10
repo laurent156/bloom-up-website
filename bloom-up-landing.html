@@ -157,7 +157,8 @@
     .nav-logo {
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
+      top: 50%;
+      transform: translate(-50%, -50%);
       width: 136px;
       line-height: 0;
     }
@@ -1103,24 +1104,25 @@
        composition. Mobile rules stay untouched. */
     @media (min-width: 1440px) {
 
-      /* Nav Bar — frame 1920×118, pt-55 px-99, items centred in the
-         remaining 63px. That maths puts the links at y=75 and the shuffle
-         button at y=64, exactly as in Figma. */
+      /* Nav Bar — Figma's frame is 1920×118 with pt-55 and no bottom padding,
+         which parks everything in the lower 63px and leaves the 199px logo
+         flush against the bottom edge. That reads fine there because the bar
+         is transparent over the hero and has no visible edge. Ours is opaque
+         from the first scroll, so the crowding shows: the padding is even here
+         and the content centred, with the logo and button eased down a little
+         (63→52px and 45→40px) to give the bar some air. */
       nav {
         height: calc(118 * var(--u));
-        padding: calc(55 * var(--u)) var(--page-x) 0;
+        padding: 0 var(--page-x);
         align-items: center;
       }
       .nav-links { gap: calc(45 * var(--u)); }
       .nav-links a { font-size: calc(16 * var(--u)); }
-      .nav-logo {
-        top: calc(55 * var(--u));
-        width: calc(199 * var(--u));
-      }
+      .nav-logo { width: calc(164 * var(--u)); }
       .nav-actions { width: auto; }
       .mood-toggle {
-        height: auto;
-        padding: calc(12 * var(--u)) calc(27 * var(--u));
+        height: calc(40 * var(--u));
+        padding: 0 calc(24 * var(--u));
         border: none;
         border-radius: calc(37 * var(--u));
         font-size: calc(16 * var(--u));
