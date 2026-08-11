@@ -767,11 +767,13 @@
     }
 
     /* ─── RITUEL ─── */
+    /* Figma stacks this flush under Espace, whose gallery already touches its
+       own bottom edge. */
     #rituel {
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-height: 520px;
-      margin-top: 100px;
+      margin-top: 0;
     }
     .rituel-img {
       position: relative;
@@ -784,55 +786,88 @@
       object-fit: cover;
       display: block;
     }
+    /* --blush-section already holds #FFEBC6, which is what the design uses
+       here — only its name is misleading. Left as is. */
     .rituel-content {
       background: var(--blush-section);
-      padding: 80px 80px;
+      padding: 56px 40px;
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
       justify-content: center;
+      gap: 24px;
     }
     .badge-outline-green {
       background: var(--accent-purple);
       color: #fff;
-      display: inline-block;
       width: fit-content;
-      margin-bottom: 28px;
+      margin-bottom: 0;
     }
+    /* Playfair Medium here, not Skinova: the design gives this heading the
+       serif rather than the display face used by the hero. Two sizes, with
+       the lead line set larger on its own line. */
     .rituel-title {
-      font-family: 'Skinova', Georgia, serif;
-      font-size: clamp(38px, 3.8vw, 58px);
-      font-weight: 400;
+      font-family: var(--playfair);
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 500;
       line-height: 1.15;
-      margin-bottom: 18px;
-      letter-spacing: -0.01em;
-      text-wrap: balance;
+      margin-bottom: 0;
+      letter-spacing: 0.06em;
+      color: var(--dark-brown);
+      text-wrap: initial;
+    }
+    /* Sized in em so the design's 70/44 contrast holds at every width. Two
+       independent clamps drifted to 1.13x on mobile, flattening the effect. */
+    .rituel-title-lead {
+      display: block;
+      font-size: 1.591em;
+      line-height: 1;
     }
     .rituel-sub {
-      font-size: 13px;
-      line-height: 1.7;
-      max-width: 380px;
-      margin-bottom: 40px;
-      opacity: 0.8;
+      font-size: clamp(14px, 1.6vw, 16px);
+      line-height: normal;
+      letter-spacing: 0.09em;
+      max-width: 468px;
+      margin-bottom: 0;
     }
-    .steps { display: flex; flex-direction: column; }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+    }
     .step {
+      position: relative;
       display: flex;
       align-items: center;
-      gap: 22px;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(35, 20, 9, 0.14);
-      font-size: 13.5px;
-      letter-spacing: 0.02em;
+      gap: 16px;
+      padding: 0;
+      border: none;
+      font-family: var(--playfair);
+      font-weight: 500;
+      font-size: clamp(15px, 1.8vw, 20px);
+      line-height: 1.15;
+      letter-spacing: 0.09em;
+      color: var(--dark-brown);
     }
-    .steps .step:first-child {
-      border-top: 1px solid rgba(35, 20, 9, 0.14);
+    /* The design draws a rule between steps only — none above the first or
+       below the last — and it stops short of the column's right edge. */
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -14px;
+      width: min(664px, 100%);
+      height: 1px;
+      background: var(--dark-brown);
     }
     .step-num {
-      font-family: var(--serif);
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      min-width: 22px;
-      opacity: 0.7;
+      font-family: var(--playfair);
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      min-width: 0;
+      flex-shrink: 0;
     }
 
     /* ─── FOOTER ─── */
@@ -1083,6 +1118,38 @@
         height: calc(647 * var(--u));
         gap: calc(13 * var(--u));
       }
+
+      /* ── Rituel / Wellness section (Figma node 34:5, 1920×1004) ──
+         Photo 910px wide on the left, content block at x=991 — so the split
+         is at 910, not the halfway point the grid used. */
+      #rituel {
+        grid-template-columns: calc(910 * var(--u)) 1fr;
+        min-height: calc(1004 * var(--u));
+      }
+      .rituel-content {
+        padding: calc(160 * var(--u)) calc(87 * var(--u))
+                 calc(193 * var(--u)) calc(81 * var(--u));
+        justify-content: flex-start;
+        gap: calc(32 * var(--u));
+      }
+      .rituel-title {
+        font-size: calc(44 * var(--u));
+        letter-spacing: calc(6.03 * var(--u));
+      }
+      .rituel-sub {
+        font-size: max(13px, calc(18 * var(--u)));
+        max-width: calc(468 * var(--u));
+      }
+      .steps { gap: calc(40 * var(--u)); }
+      .step {
+        gap: calc(32 * var(--u));
+        font-size: max(15px, calc(28 * var(--u)));
+      }
+      .step:not(:last-child)::after {
+        bottom: calc(-20 * var(--u));
+        width: min(calc(664 * var(--u)), 100%);
+      }
+      .step-num { font-size: max(20px, calc(44 * var(--u))); }
 
       /* ── Carte section (Figma node 22:1772, 1920×1086) ── */
       #carte { padding: calc(107 * var(--u)) var(--page-x) calc(149 * var(--u)); }
@@ -1814,7 +1881,7 @@
   </div>
   <div class="rituel-content">
     <span class="badge badge-green badge-outline-green">Sans réservations</span>
-    <h3 class="rituel-title">Pose-toi.<br>Laisse la lumière<br>faire le travail.</h3>
+    <h3 class="rituel-title"><span class="rituel-title-lead">Pose-toi.</span>Laisse la lumière faire le travail.</h3>
     <p class="rituel-sub">Notre espace wellness te propose des rituels express sans rendez-vous. Quelques minutes suffisent pour recharger ta peau et repartir différente.</p>
     <div class="steps">
       <div class="step">
