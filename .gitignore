@@ -1,2 +1,10 @@
 .DS_Store
 .claude/settings.local.json
+
+# impeccable (npx impeccable install) — local agent tooling, not site source.
+# ~6.5MB across 299 files; the repo is served by GitHub Pages, so committing
+# them would publish and redeploy tooling config with the site.
+.claude/skills/
+.github/skills/
+.github/agents/
+.github/hooks/
