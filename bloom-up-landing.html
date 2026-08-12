@@ -871,44 +871,57 @@
     }
 
     /* ─── FOOTER ─── */
+    /* Design has every footer element in pure white, not the pale --rose the
+       code used. */
     footer {
       background: var(--dark-green);
-      color: var(--rose);
+      color: #fff;
       text-align: center;
-      padding: 80px var(--page-x) 60px;
+      padding: 80px var(--page-x) 88px;
     }
     .footer-pre {
-      font-size: 14px;
-      letter-spacing: 0.03em;
-      opacity: 0.7;
-      margin-bottom: 4px;
+      font-family: var(--playfair);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin-bottom: 31px;
     }
+    /* Same vector lockup as the nav, just larger — an SVG scales losslessly,
+       so there is no second asset to keep in sync. */
     .footer-brand {
-      font-family: 'Skinova', Georgia, serif;
-      font-size: clamp(80px, 11vw, 148px);
-      font-weight: 400;
-      line-height: 1.0;
-      margin-bottom: 64px;
-      color: var(--rose);
+      width: min(663px, 100%);
+      margin: 0 auto 55px;
+      line-height: 0;
+    }
+    .footer-brand img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     .footer-cols {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
-      max-width: 700px;
+      max-width: 1333px;
       margin: 0 auto;
     }
     .footer-col-label {
-      font-size: 10px;
-      letter-spacing: 0.2em;
+      font-family: var(--playfair);
+      font-size: clamp(16px, 2vw, 22px);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
-      opacity: 0.55;
-      margin-bottom: 14px;
+      margin-bottom: 25px;
     }
-    .footer-col p {
-      font-size: 13px;
-      line-height: 1.85;
-      opacity: 0.8;
+    /* :not() excludes the label, which is also a <p> here — `.footer-col p`
+       outweighs `.footer-col-label` on specificity and was silently overriding
+       its size. */
+    .footer-col p:not(.footer-col-label) {
+      font-size: clamp(14px, 1.6vw, 16px);
+      line-height: normal;
+      letter-spacing: 0.09em;
     }
     /* ─── HERO ENTRANCE ─── */
     @keyframes bu-up {
@@ -1150,6 +1163,32 @@
         width: min(calc(664 * var(--u)), 100%);
       }
       .step-num { font-size: max(20px, calc(44 * var(--u))); }
+
+      /* ── Footer (Figma node 36:15, 1920×773) ──
+         Tagline at y=146, logo at 221, column headings at 487, details at 541.
+         The frame's three columns are unevenly spaced (488 then 479) and sit
+         37px left of centre; per Laurent's call on Espace those irregularities
+         are normalised into an evenly spaced, centred group. */
+      footer { padding: calc(146 * var(--u)) var(--page-x) calc(157 * var(--u)); }
+      .footer-pre {
+        font-size: calc(44 * var(--u));
+        margin-bottom: calc(31 * var(--u));
+      }
+      .footer-brand {
+        width: calc(663 * var(--u));
+        margin-bottom: calc(55 * var(--u));
+      }
+      .footer-cols {
+        max-width: calc(1333 * var(--u));
+        gap: calc(117 * var(--u));
+      }
+      .footer-col-label {
+        font-size: calc(29 * var(--u));
+        margin-bottom: calc(25 * var(--u));
+      }
+      .footer-col p:not(.footer-col-label) {
+        font-size: max(13px, calc(18 * var(--u)));
+      }
 
       /* ── Carte section (Figma node 22:1772, 1920×1086) ── */
       #carte { padding: calc(107 * var(--u)) var(--page-x) calc(149 * var(--u)); }
@@ -1907,7 +1946,10 @@
 <!-- FOOTER -->
 <footer id="infos">
   <p class="footer-pre">On se donne rendez-vous chez</p>
-  <div class="footer-brand">Bloom Up</div>
+  <!-- alt completes the tagline above it: "On se donne rendez-vous chez Bloom Up" -->
+  <div class="footer-brand">
+    <img src="images/logo-bloom-up.svg" alt="Bloom Up" width="663" height="211">
+  </div>
   <div class="footer-cols">
     <div class="footer-col">
       <p class="footer-col-label">Nous trouver</p>
@@ -1919,7 +1961,7 @@
     </div>
     <div class="footer-col">
       <p class="footer-col-label">Horaires</p>
-      <p>Lun – Sam : (à compléter)<br>Dim : (à compléter)</p>
+      <p>Lun – Sam · (à compléter)<br>Dim · (à compléter)</p>
     </div>
   </div>
 </footer>
