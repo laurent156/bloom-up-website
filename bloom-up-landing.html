@@ -377,6 +377,11 @@
       to   { transform: rotate(360deg); }
     }
 
+    /* Figma-precise geometry only (enabled ≥1440px below) — under that the
+       hero's two columns are separate boxes with no shared canvas for a
+       727×701 decoration to bleed across, so it's hidden by default. */
+    .hero-sunburst { display: none; }
+
     /* ─── TICKER ─── */
     .ticker {
       background: var(--dark-green);
@@ -1358,6 +1363,26 @@
         height: calc(201 * var(--u));
       }
 
+      /* Sunburst decoration — Figma's own 727×701 frame, anchored behind the
+         CTA row. No z-index tricks needed: it's the first child of .hero, so
+         it paints under hero-left's text/buttons and under hero-right's
+         opaque photo wherever they overlap it, same as the Figma layering. */
+      .hero-sunburst {
+        display: block;
+        position: absolute;
+        left: calc(506 * var(--u));
+        top: calc(730 * var(--u));
+        width: calc(727 * var(--u));
+        height: calc(701 * var(--u));
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .hero-sunburst img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       /* Marquee bar — 86px tall, white Playfair at 24px. */
       .ticker {
         height: calc(86 * var(--u));
@@ -1578,6 +1603,9 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-sunburst" aria-hidden="true">
+    <img src="images/sunburst-decoration.svg" alt="" width="727" height="701">
+  </div>
   <div class="hero-left">
     <p class="hero-location"><strong>Mons</strong> - <em>Grands Prés</em></p>
     <h1 class="hero-title">Good inside.<br>Glowing outside.</h1>
