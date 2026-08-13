@@ -1436,6 +1436,12 @@
       nav { padding: 14px 24px; }
       .nav-logo { width: 108px; }
       .nav-links a { font-size: 12px; letter-spacing: 0.12em; }
+      /* Dropped on true mobile: a delight toggle competing with the hamburger
+         for thumb-zone space isn't worth it on a small screen. .nav-actions
+         only ever wraps .mood-toggle, so hiding it also removes its reserved
+         margin instead of leaving a gap. Still present at tablet widths
+         (768–1023px), where there's room for it. */
+      .nav-actions { display: none; }
 
       /* Hero */
       .hero {
