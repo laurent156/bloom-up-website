@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "title": "Design System: Bloom Up",
+  "extensions": {
+    "colorMeta": {
+      "sunrise-orange": { "role": "primary", "displayName": "Sunrise Orange", "canonical": "oklch(68.0% 0.184 43.2)", "tonalRamp": ["#3a0000", "#660000", "#930000", "#c03a00", "#ed6620", "#ff8a4b", "#ffa769", "#ffc284"] },
+      "wisteria-bloom": { "role": "secondary", "displayName": "Wisteria Bloom", "canonical": "oklch(71.0% 0.130 294.6)", "tonalRamp": ["#14003a", "#301060", "#513788", "#755db2", "#9b84dd", "#bda6ff", "#dac3ff", "#f4ddff"] },
+      "buttercream": { "role": "tertiary", "displayName": "Buttercream", "canonical": "oklch(94.7% 0.053 82.9)", "tonalRamp": ["#160800", "#352604", "#584827", "#7e6c4b", "#a59370", "#c8b591", "#e5d2ad", "#ffecc7"] },
+      "blush-rose": { "role": "tertiary", "displayName": "Blush Rose", "canonical": "oklch(94.8% 0.023 14.3)", "tonalRamp": ["#140708", "#332425", "#564546", "#7c696a", "#a39091", "#c6b2b3", "#e3cecf", "#fee9ea"] },
+      "warm-cream": { "role": "neutral", "displayName": "Warm Cream", "canonical": "oklch(97.0% 0.015 77.1)", "tonalRamp": ["#0f0a05", "#2d2821", "#4f4941", "#746e65", "#9b948b", "#bdb6ad", "#dad3c9", "#f4ede3"] },
+      "charcoal-brown": { "role": "neutral", "displayName": "Charcoal Brown", "canonical": "oklch(32.9% 0.000 89.9)", "tonalRamp": ["#0b0b0b", "#292929", "#4a4a4a", "#6f6f6f", "#959595", "#b7b7b7", "#d4d4d4", "#eeeeee"] },
+      "espresso-brown": { "role": "neutral", "displayName": "Espresso Brown", "canonical": "oklch(25.8% 0.054 38.1)", "tonalRamp": ["#1d0200", "#3f1f14", "#644035", "#8b6458", "#b38a7d", "#d7ac9f", "#f5c9bb", "#ffe3d5"] },
+      "dusty-rose": { "role": "neutral", "displayName": "Dusty Rose", "canonical": "oklch(73.9% 0.099 1.7)", "tonalRamp": ["#260008", "#4c0a25", "#743046", "#9d546a", "#c87b91", "#ed9db3", "#ffb9cf", "#ffd3ea"] },
+      "warm-nude": { "role": "neutral", "displayName": "Warm Nude", "canonical": "oklch(78.3% 0.032 61.0)", "tonalRamp": ["#150801", "#352518", "#584739", "#7d6b5c", "#a49182", "#c7b3a3", "#e5d0c0", "#ffead9"] },
+      "muted-nude": { "role": "neutral", "displayName": "Muted Nude", "canonical": "oklch(71.5% 0.029 67.3)", "tonalRamp": ["#130801", "#332619", "#554839", "#7b6c5d", "#a29282", "#c5b4a4", "#e2d1c0", "#fcebda"] },
+      "terracotta-shadow": { "role": "neutral", "displayName": "Terracotta Shadow", "canonical": "oklch(54.6% 0.049 18.8)", "tonalRamp": ["#1c0204", "#3e1e1f", "#633f40", "#896363", "#b28a89", "#d5abab", "#f3c8c8", "#ffe2e2"] },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "oklch(91.1% 0.014 67.7)", "tonalRamp": ["#0f0a06", "#2e2822", "#504942", "#746d66", "#9b948c", "#beb6ae", "#dbd3cb", "#f5ede5"] },
+      "hairline-soft": { "role": "neutral", "displayName": "Hairline Soft", "canonical": "oklch(94.2% 0.011 76.6)", "tonalRamp": ["#0e0b06", "#2c2823", "#4e4a44", "#726e68", "#99948e", "#bbb7b0", "#d8d3cd", "#f3eee7"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero headline only ('Good inside. Glowing outside.'). Never reused elsewhere in the system." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles (La Carte, L'Espace, Le Rituel) — always uppercase Playfair." },
+      "title": { "displayName": "Title", "purpose": "Sub-headings within a section: the Rituel heading, menu item names and prices." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy across the page, heavily letter-spaced (0.09em)." },
+      "label": { "displayName": "Label", "purpose": "Nav links, button labels, small controls like 'Voir plus'." }
+    },
+    "shadows": [
+      { "name": "button-hover-lift", "value": "0 8px 24px rgba(35, 20, 9, 0.2)", "purpose": "Primary CTA hover only, paired with a 2px lift. Removed on :active." },
+      { "name": "floating-menu-preview", "value": "0 18px 44px rgba(57, 25, 15, 0.26)", "purpose": "The cursor-following product photo shown on menu item hover — the system's one true resting shadow, and it only exists while active." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Default easing for button/hover micro-interactions (140-260ms)." },
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Easing for larger reveal/expand transitions (e.g. Voir plus expand)." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "767px" },
+      { "name": "tablet", "value": "1023px" },
+      { "name": "figma-precise", "value": "1440px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main CTA pill (e.g. 'Découvrir'). Charcoal fill, white uppercase label, trailing arrow icon.",
+      "html": "<a href=\"#\" class=\"ds-btn-primary\">Découvrir<span class=\"ds-btn-arrow\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 17L17 7M17 7H8M17 7v9\"/></svg></span></a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #353535; color: #fff; padding: 12px 27px 12px 36px; border-radius: 37px; font-size: 16px; font-weight: 400; letter-spacing: 0.09em; text-transform: uppercase; text-decoration: none; transition: transform 160ms cubic-bezier(0.25,1,0.5,1), box-shadow 160ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(35,20,9,0.2); } .ds-btn-primary:active { transform: translateY(0); box-shadow: none; } .ds-btn-arrow { display: inline-flex; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Lower-emphasis CTA sitting beside the primary one (e.g. 'Nous trouver'). White fill, black label.",
+      "html": "<a href=\"#\" class=\"ds-btn-secondary\">Nous trouver</a>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; background: #fff; color: #000; padding: 12px 24px; border-radius: 37px; font-size: 16px; font-weight: 400; letter-spacing: 0.09em; text-transform: uppercase; text-decoration: none; }"
+    },
+    {
+      "name": "Category Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Small pill tag used sparingly for category/status labels — the system's one accent-purple UI moment.",
+      "html": "<span class=\"ds-tag\">Signature</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; justify-content: center; background: #A790EA; color: #fff; padding: 12px 28px; border-radius: 30.5px; font-family: 'Playfair', Georgia, serif; font-size: 16px; letter-spacing: 0.02em; white-space: nowrap; }"
+    },
+    {
+      "name": "Menu Card",
+      "kind": "card",
+      "refersTo": null,
+      "description": "White container holding a menu category's item list. Flat, no resting shadow.",
+      "html": "<div class=\"ds-menu-card\"><div class=\"ds-menu-item\"><div class=\"ds-menu-item-row\"><span class=\"ds-menu-item-name\">Latte Collagène</span><span class=\"ds-menu-item-price\">5,50 €</span></div><p class=\"ds-menu-item-desc\">Espresso, lait, collagène marin neutre</p></div></div>",
+      "css": ".ds-menu-card { background: #fff; border-radius: 15px; padding: 32px 28px; } .ds-menu-item { padding: 16px 0; border-bottom: 1px solid #F0EBE4; } .ds-menu-item-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; } .ds-menu-item-name { font-family: 'Playfair', Georgia, serif; font-size: 20px; font-weight: 600; letter-spacing: 0.05em; color: #39190F; } .ds-menu-item-price { font-family: 'Playfair', Georgia, serif; font-size: 16px; font-weight: 600; letter-spacing: 0.05em; color: #39190F; } .ds-menu-item-desc { font-size: 14px; color: #DF90A6; letter-spacing: 0.09em; line-height: 1.37; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Fixed, transparent-over-hero nav with uppercase links and the Shuffle mood toggle.",
+      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-links\"><a href=\"#\">Concept</a><a href=\"#\">Carte</a><a href=\"#\">Espace</a></div><button class=\"ds-mood-toggle\">Shuffle my glow</button></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 56px; background: transparent; } .ds-nav-links { display: flex; gap: 45px; } .ds-nav-links a { font-size: 16px; letter-spacing: 0.01em; text-transform: uppercase; color: #fff; text-decoration: none; transition: opacity 160ms ease; } .ds-nav-links a:hover { opacity: 0.6; } .ds-mood-toggle { display: inline-flex; align-items: center; justify-content: center; height: 42px; padding: 0 22px; border-radius: 37px; border: 1.5px solid rgba(255,255,255,0.4); background: transparent; color: #fff; font-family: 'Playfair', Georgia, serif; font-size: 16px; letter-spacing: 0.09em; text-transform: uppercase; transition: background-color 220ms ease, border-color 220ms ease; } .ds-mood-toggle:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.6); }"
+    },
+    {
+      "name": "Menu Hover Preview",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature component: a cursor-following floating photo revealed on menu item hover. The system's one genuine drop shadow.",
+      "html": "<div class=\"ds-menu-preview\"><div class=\"ds-menu-preview-inner\"><img src=\"\" alt=\"\"></div></div>",
+      "css": ".ds-menu-preview { position: fixed; top: 0; left: 0; pointer-events: none; } .ds-menu-preview-inner { width: 260px; height: 300px; border-radius: 15px; overflow: hidden; background: #B0A090; box-shadow: 0 18px 44px rgba(57,25,15,0.26); opacity: 0; transform: scale(0.94); transition: opacity 200ms cubic-bezier(0.25,1,0.5,1), transform 260ms cubic-bezier(0.25,1,0.5,1); } .ds-menu-preview.is-visible .ds-menu-preview-inner { opacity: 1; transform: scale(1); } .ds-menu-preview-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Collagen Bloom",
+    "overview": "Bloom Up is a collagen café and beauty bar in Mons' Grands Prés, and its whole visual system reads as a physical extension of the product: soft, plump, nourishing shapes rendered in warm, sun-warmed color. Nothing on this page has a sharp corner — buttons are full stadium pills, tags and badges are rounded capsules, the hero's signature element is a literal spinning circle, and even the section-to-section rhythm favors generous, unhurried padding over tight grids. The mood is warm & refined: editorial serif headlines and a composed, boutique-café restraint lead, with a bright terracotta-orange and a candy-soft pastel purple supplying the warmth and personality underneath.\n\nThe palette is anchored by Sunrise Orange as a full-bleed surface color (hero, ticker, footer), not as an interactive accent. Wisteria Bloom, a soft pastel purple, is reserved for small badge/tag moments and the hero's rotating signature badge. Everything else is warm neutrals: creams, blushes, and two distinct dark browns that split duty between primary text (Charcoal Brown) and menu/heading emphasis (Espresso Brown).\n\nDepth is conveyed through color blocking between full-bleed sections, not through shadows or layering — the system is flat at rest, with shadow reserved for two specific interaction moments. Motion is quiet and ambient by design intent, while direct interactions (button hover, menu reveal) stay snappy.",
+    "keyCharacteristics": [
+      "Full stadium-pill buttons and badges; nothing sharp-cornered anywhere in the system.",
+      "Sunrise Orange is a surface/section color, never a button color — interactive actions are always the dark neutral.",
+      "Flat by default — shadow appears only as a direct response to hover or a floating interaction, never as ambient card elevation.",
+      "Three-family type system: a display serif for the hero headline only, a distinct serif for all other headings/labels, and a warm sans for body copy.",
+      "Warm neutrals (cream, blush, buttercream) carry most of the page; the two brand hues (orange, purple) are used sparingly and deliberately."
+    ],
+    "rules": [
+      { "name": "The Neutral-Action Rule", "body": "Every interactive control — both hero CTAs, the shuffle toggle, the Carte carousel arrows, 'Voir plus' — is rendered in Charcoal Brown (or white on an orange surface), never in Sunrise Orange or Wisteria Bloom. The brand hues are surface and decoration colors; they never carry a click target.", "section": "colors" },
+      { "name": "The One Accent Rule", "body": "Wisteria Bloom appears in at most one or two elements per section (the badge, a tag). It never becomes a section background or a repeated UI color — its rarity is what keeps it feeling special rather than decorative wallpaper.", "section": "colors" },
+      { "name": "The Tracked-Type Rule", "body": "Body and label text carry noticeably heavier letter-spacing (0.09em) than most web type. This is a deliberate, consistent choice across the whole system — new body copy should match it rather than defaulting to normal tracking.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Shadow is reserved strictly for direct-interaction feedback (a hover-lift, a floating cursor-follower) — never for passive elevation of a card, section, or badge. If a new component seems to need a resting shadow to feel 'raised,' reconsider the component instead of adding the shadow.", "section": "elevation" },
+      { "name": "The No-Sharp-Corners Rule", "body": "If a new element needs a border-radius, default to either a full stadium/circle (interactive controls, tags) or 15px (containers/cards). A sharp or barely-rounded corner reads as off-brand immediately.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do keep every button, tag, and small control fully rounded (stadium or circle) — see The No-Sharp-Corners Rule.",
+      "Do use Charcoal Brown (or white on a dark surface) for anything clickable — see The Neutral-Action Rule.",
+      "Do carry heavy letter-spacing (0.09em) on body and label text to match the system's tracked-type character.",
+      "Do reserve shadow for direct hover/interaction feedback only, never for resting elevation.",
+      "Do use Sunrise Orange only as a full-bleed section background, never as a small accent or button fill."
+    ],
+    "donts": [
+      "Don't give Sunrise Orange or Wisteria Bloom to a button, link, or other click target.",
+      "Don't add a resting shadow to a card, badge, or container to make it feel 'raised' — block color and section rhythm carry depth instead.",
+      "Don't introduce a sharp or barely-rounded corner anywhere in the UI.",
+      "Don't persist the mood-shuffle palette choice across visits — every fresh load starts on the default Sunrise palette by design."
+    ]
+  }
+}
