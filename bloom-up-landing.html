@@ -366,7 +366,7 @@
     .hero-badge-svg {
       width: 100%;
       height: 100%;
-      animation: spin 20s linear infinite;
+      animation: spin 30s linear infinite;
     }
     .hero-badge-svg circle {
       fill: var(--dark-green);
@@ -387,7 +387,7 @@
     }
     .ticker-track {
       display: inline-flex;
-      animation: marquee 34s linear infinite;
+      animation: marquee 48s linear infinite;
     }
     /* Figma uses "Playfair" here — a different family from the Playfair
        Display on the shuffle button, with an optical-size axis. */
@@ -530,9 +530,16 @@
     }
 
     /* ─── CARTE ─── */
+    /* Concept and #carte share the exact same --warm-section fill with
+       nothing between them in the DOM, so scrolling from one into the other
+       reads as one continuous block with no seam. A hairline (the same
+       rgba(35,20,9,x) ink already used for dividers elsewhere in this file,
+       not a new colour) marks the boundary without touching either
+       section's own background token. */
     #carte {
       background: var(--warm-section);
       padding: 72px var(--page-x) 80px;
+      border-top: 1px solid rgba(35, 20, 9, 0.08);
     }
     .carte-header {
       display: flex;
@@ -956,7 +963,7 @@
     /* Targets <picture>, not <img> — the img is wrapped, so the old
        `.hero-right > img` selector never matched and this never animated. */
     .hero-right picture { animation: bu-scale-in 1000ms var(--ease-out-quart) 0ms both; }
-    .hero-badge-svg   { animation: spin 20s linear infinite, bu-fade 400ms ease 820ms both; }
+    .hero-badge-svg   { animation: spin 30s linear infinite, bu-fade 400ms ease 820ms both; }
 
     /* ─── BUTTON MICRO-INTERACTIONS ─── */
     .btn-dark {
@@ -2231,9 +2238,12 @@
 /* ─── MOOD PALETTE SHUFFLE ───
    Stays strictly within the brand's 5 approved colors (orange, purple,
    dark, warm cream, blush) — only the ROLE each color plays is reshuffled,
-   so every combination still reads as "Bloom Up" no matter what lands. */
+   so every combination still reads as "Bloom Up" no matter what lands.
+   Deliberately NOT persisted across visits (no localStorage): a returning
+   visitor should always meet the same Sunrise/orange the shop's real signage
+   shows, not whichever mood a previous session happened to land on. Shuffling
+   is a within-visit toy — reload the page and it's back to Sunrise. */
 (function () {
-  var STORAGE_KEY = 'bloomup-palette';
   var CREAM = '#FBF4EA';
   var DARK = '#353535';
   var ORANGE = '#F26925';
@@ -2331,7 +2341,6 @@
     }
 
     applyPalette(next);
-    try { localStorage.setItem(STORAGE_KEY, String(next)); } catch (e) {}
 
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduceMotion) {
@@ -2340,10 +2349,7 @@
     }
   }
 
-  var saved = null;
-  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-  if (saved !== null && PALETTES[+saved]) applyPalette(+saved);
-  else applyPalette(0);
+  applyPalette(0);
 
   if (toggle) {
     toggle.addEventListener('click', shuffle);
