@@ -77,7 +77,6 @@
       /* Menu item descriptions — stronger than the pale --rose surface tint. */
       --rose-text: #DF90A6;
       --display: 'Skinova', Georgia, serif;
-      --serif: 'PlayfairDisplay', Georgia, serif;
       --playfair: 'Playfair', 'PlayfairDisplay', Georgia, serif;
       --sans: 'SourceSans3', 'SourceSansPro', system-ui, sans-serif;
       --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -112,9 +111,14 @@
       font-family: var(--sans);
       overflow-x: hidden;
     }
-    /* ─── MOOD PALETTE TRANSITION ─── */
+    /* ─── MOOD PALETTE TRANSITION ───
+       Scoped to elements whose background/color actually comes from a
+       shuffled variable. .footer-brand (now just an SVG-logo wrapper, no
+       colour of its own) and .menu-item-desc (--rose-text is a static hex,
+       never reassigned by the shuffle) were listed here from an earlier pass
+       but animate nothing; dropped. */
     body, .hero, .hero-left, .ticker, footer, .badge-green, .badge-outline-green,
-    .rituel-content, #carte, .footer-brand, .menu-item-desc {
+    .rituel-content, #carte {
       transition: background-color 550ms ease, color 550ms ease, border-color 550ms ease;
     }
     .page-wrapper {
@@ -173,6 +177,13 @@
       align-items: center;
       justify-content: flex-end;
     }
+    /* Outline treatment, not the solid --dark-brown fill .btn-dark uses: a
+       critique found this button reading as a third hero CTA (same fill,
+       same radius, same size as "Découvrir") before a first-time visitor had
+       even read the tagline. It's a delight/utility toggle, not a conversion
+       action, so it now sits visually behind both real CTAs — border only at
+       rest, a soft fill on hover/press instead of a lift+shadow that read as
+       CTA-weight interaction. */
     .mood-toggle {
       display: inline-flex;
       align-items: center;
@@ -181,38 +192,39 @@
       height: 42px;
       padding: 0 22px;
       border-radius: 37px;
-      border: 1.5px solid rgba(255, 255, 255, 0.22);
-      background: var(--dark-brown);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      background: transparent;
       cursor: pointer;
       flex-shrink: 0;
-      font-family: var(--serif);
+      font-family: var(--playfair);
       font-size: 16px;
       font-weight: 400;
       letter-spacing: 0.09em;
       text-transform: uppercase;
       color: #fff;
       white-space: nowrap;
-      transition: transform 220ms var(--ease-out-quart), box-shadow 220ms var(--ease-out-quart), border-color 220ms ease, background 220ms ease;
+      transition: background-color 220ms ease, border-color 220ms ease;
     }
     .mood-toggle:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(35, 20, 9, 0.22);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.6);
     }
     .mood-toggle:focus-visible { outline-color: #fff; outline-offset: 3px; }
     .mood-toggle-dots { display: none; }
-    .mood-toggle.is-shuffling { animation: mood-bounce 650ms var(--ease-out-quart); }
-    .mood-toggle.is-shuffling .mood-toggle-dots { animation: mood-spin 650ms var(--ease-out-quart); }
-    @keyframes mood-bounce {
-      0%   { transform: scale(1) rotate(0deg); }
-      30%  { transform: scale(0.88) rotate(-8deg); }
-      55%  { transform: scale(1.1) rotate(6deg); }
-      75%  { transform: scale(0.97) rotate(-3deg); }
-      100% { transform: scale(1) rotate(0deg); }
+    .mood-toggle.is-shuffling { animation: mood-pulse 500ms var(--ease-out-quart); }
+    .mood-toggle.is-shuffling .mood-toggle-dots { animation: mood-spin 500ms var(--ease-out-quart); }
+    /* A single settling arc, not a wobble: the previous keyframes overshot
+       scale and rotation back and forth (the detector's own scan flags this
+       shape as "bounce-easing"), which read as more novelty-toy than the
+       calmer rest of the site's motion language. */
+    @keyframes mood-pulse {
+      0%   { opacity: 1; transform: scale(1); }
+      40%  { opacity: 0.6; transform: scale(0.96); }
+      100% { opacity: 1; transform: scale(1); }
     }
     @keyframes mood-spin {
-      0%   { transform: rotate(0deg) scale(1); }
-      50%  { transform: rotate(190deg) scale(1.25); }
-      100% { transform: rotate(360deg) scale(1); }
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
     }
     .mood-wipe-ring, .mood-confetti-dot {
       position: fixed;
@@ -1256,7 +1268,6 @@
       .mood-toggle {
         height: calc(40 * var(--u));
         padding: 0 calc(24 * var(--u));
-        border: none;
         border-radius: calc(37 * var(--u));
         font-size: calc(16 * var(--u));
       }
@@ -1663,7 +1674,7 @@
 <!-- LE CONCEPT -->
 <section id="concept">
   <div class="two-col">
-    <p class="section-label">Le Concept</p>
+    <h2 class="section-label">Le Concept</h2>
     <div class="concept-body">
       <p>Bloom Up, c'est un collagène café <em>&</em> beauty – un lieu doux où chaque boisson est pensée pour toi, de l'intérieur. Du café, des boissons enrichies au collagène, des masques LED express, et le plaisir de prendre soin de sa peau sans y consacrer une journée.</p>
       <a class="concept-link" href="#infos"><span class="concept-link-text">Trouve-nous aux Grands Prés, Mons</span><span class="concept-link-arrow" aria-hidden="true"></span></a>
@@ -1700,7 +1711,7 @@
 <!-- LA CARTE -->
 <section id="carte">
   <div class="carte-header">
-    <p class="section-label">La Carte</p>
+    <h2 class="section-label">La Carte</h2>
     <div class="carte-nav">
       <button class="carte-prev" aria-label="Précédent" disabled><span class="carte-nav-icon" aria-hidden="true"></span></button>
       <button class="carte-next" aria-label="Suivant"><span class="carte-nav-icon" aria-hidden="true"></span></button>
@@ -1717,7 +1728,7 @@
       <!-- CARTE 1 : Boissons Collagène -->
       <div class="menu-card">
         <div class="menu-card-top">
-          <h2 class="menu-cat-title">Boissons Collagène</h2>
+          <h3 class="menu-cat-title">Boissons Collagène</h3>
           <span class="badge badge-green">Spécialités</span>
         </div>
         <div class="menu-grid">
@@ -1768,8 +1779,12 @@
           </div>
         </div>
 
-        <!-- Items cachés -->
-        <div class="menu-more">
+        <!-- Items cachés — aria-hidden is kept in sync with .open by JS.
+             max-height:0 + overflow:hidden hides this from sighted users but
+             not from assistive tech, which ignores visual clipping; without
+             aria-hidden a screen reader would announce all 18 drinks instead
+             of the 10 a sighted user sees before expanding. -->
+        <div class="menu-more" id="menu-more-1" aria-hidden="true">
           <div class="menu-grid">
             <div>
               <div class="menu-item">
@@ -1807,7 +1822,7 @@
           </div>
         </div>
 
-        <button class="menu-voir-plus" aria-expanded="false">
+        <button class="menu-voir-plus" aria-expanded="false" aria-controls="menu-more-1">
           <span class="vp-label">Voir plus</span>
           <span class="vp-chevron">&#8964;</span>
         </button>
@@ -1816,7 +1831,7 @@
       <!-- CARTE 2 : Café et autres boissons -->
       <div class="menu-card">
         <div class="menu-card-top">
-          <h2 class="menu-cat-title">Café &amp; autres boissons</h2>
+          <h3 class="menu-cat-title">Café &amp; autres boissons</h3>
           <span class="badge badge-green">Single origin</span>
         </div>
         <div class="menu-grid">
@@ -1875,7 +1890,7 @@
 <!-- L'ESPACE -->
 <section id="espace">
   <div class="two-col">
-    <p class="section-label">L'Espace</p>
+    <h2 class="section-label">L'Espace</h2>
     <p class="espace-text">Bloom Up occupe un espace lumineux et soigné au cœur des Grands Prés, accessible par deux entrées depuis la galerie. Design doux, matières naturelles, zones clairement délimitées — le comptoir café d'un côté, l'espace beauty de l'autre. Que tu passes pour un latte à emporter ou que tu t'installes pour un soin LED, tu es ici chez toi.</p>
   </div>
   <div class="espace-photos">
@@ -1920,7 +1935,7 @@
   </div>
   <div class="rituel-content">
     <span class="badge badge-green badge-outline-green">Sans réservations</span>
-    <h3 class="rituel-title"><span class="rituel-title-lead">Pose-toi.</span>Laisse la lumière faire le travail.</h3>
+    <h2 class="rituel-title"><span class="rituel-title-lead">Pose-toi.</span>Laisse la lumière faire le travail.</h2>
     <p class="rituel-sub">Notre espace wellness te propose des rituels express sans rendez-vous. Quelques minutes suffisent pour recharger ta peau et repartir différente.</p>
     <div class="steps">
       <div class="step">
@@ -2160,6 +2175,9 @@
       var isOpen = vpMore.classList.toggle('open');
       vpBtn.classList.toggle('open', isOpen);
       vpBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      /* Visual clipping (max-height:0) doesn't hide this from assistive tech;
+         aria-hidden keeps a collapsed state actually silent for it too. */
+      vpMore.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
       vpBtn.querySelector('.vp-label').textContent = isOpen ? 'Voir moins' : 'Voir plus';
     });
   }
