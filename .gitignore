@@ -4,7 +4,13 @@
 # impeccable (npx impeccable install) — local agent tooling, not site source.
 # ~6.5MB across 299 files; the repo is served by GitHub Pages, so committing
 # them would publish and redeploy tooling config with the site.
-.claude/skills/
+# Matched as `skills/*` rather than `skills/` so the negation below can still
+# reach into it — git won't descend into a directory excluded outright.
+.claude/skills/*
 .github/skills/
 .github/agents/
 .github/hooks/
+
+# ...except Laurent's own authored brand skill — real project source, not
+# installed tooling, so it's carved back out of the ignore above.
+!.claude/skills/bloom-up-brand
