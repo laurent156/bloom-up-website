@@ -23,7 +23,7 @@ The differentiator is the combination itself, in one room: most collagen/wellnes
 - Location: Grands Prés shopping gallery, Mons, Belgium — accessible via two separate entrances from the gallery (one per side of the space).
 - Not yet open: a second page in this repo (`bloom-up-teaser.html`, "Bientôt à Mons") is a pre-launch coming-soon page collecting sign-ups for the opening celebration. The main landing page's footer hours are an explicit "(à compléter)" placeholder for this reason — not a content gap to fill in speculatively.
 - The rituel client is documented in 4 steps on the site: choose a treatment on arrival → settle into the cocooning space → LED mask → leave with a natural glow.
-- Menu is organized into two categories so far: "Boissons Collagène" (signature collagen drinks, e.g. The Bloom, Rose Glow, Golden Bloom — ~9,50€ each) and "Café & autres boissons."
+- Menu (work in progress, see Evidence on Hand): ten categories — Bloom Signatures, Matcha Bar, Super & Functional Lattes, Protein Blooms, Sparkling Blooms & Lemonades, Wellness Shots, Chocolate, Cold Brew, Coffee Corner, and a seasonal Autumn/Halloween set — plus a "Create Your Bloom" build-your-own section (milk, flavor, protein, collagen, glycine, spirulina, functional mushrooms and other boosters; 330ml/450ml formats) that Laurent considers important to keep on the site even without listing every combination, since it's what most clearly explains what differentiates Bloom Up. The live site currently only shows two categories ("Boissons Collagène", "Café & autres boissons") — that's the older placeholder content, not yet reconciled with this fuller menu.
 
 ## Capabilities and Constraints
 
@@ -35,11 +35,12 @@ The differentiator is the combination itself, in one room: most collagen/wellnes
 
 - Name: **Bloom Up**. Tagline: **"Good inside. Glowing outside."**
 - Voice: warm, boutique, a little playful — never clinical or overly medical/spa-formal, per the copy's tone throughout ("un lieu doux," "sans y consacrer une journée").
-- Visual identity is fully specified in [DESIGN.md](DESIGN.md) (Creative North Star: "The Collagen Bloom") — that file is the source of truth for palette, type, and component language; this file stays product-only.
+- Visual identity is authored by Laurent in `.claude/skills/bloom-up-brand/SKILL.md` (the franchise-scale source of truth — colors, type, spacing, shapes, motion, components, and the binding brand rules) and mirrored into [DESIGN.md](DESIGN.md) for design tooling; this file stays product-only.
 
 ## Evidence on Hand
 
 - Real menu copy and pricing exist on the live page for the "Boissons Collagène" category (item names, descriptions, and prices in €) and photography for Concept/Espace sections.
+- A fuller, work-in-progress menu exists at [content/carte-bloom-up.odt](content/carte-bloom-up.odt) — a simplified, website-oriented version of the real technical recipe list (organized by category, not exhaustive, deliberately withholding recipes). Laurent flagged it as still evolving ("carte en cours d'élaboration") — items will still be tasted and some eliminated before opening, so treat category names/structure as more stable than the specific item list.
 - No confirmed opening date, social media handles, or exact street address beyond "Grands Prés, Mons" — do not invent these; the teaser page's sign-up form is the only evidence of pre-launch status.
 - Footer hours are a known placeholder, not a fact to fabricate.
 
