@@ -52,16 +52,21 @@
     }
 
     /* ── BACKGROUND ──
-       Laurent's gradient (Rectangle 117.svg), translated from its SVG
-       linearGradient coordinates to a CSS angle — same two stops, same
-       direction, no need to ship the SVG itself for a flat two-color fade.
-       Its end color (#9A5AF4) is also the brand card's own background, so
-       the page fades straight into the card with no seam. */
+       Started from Laurent's flat two-stop gradient (Rectangle 117.svg,
+       #E3D2FE -> #9A5AF4); reworked into three layered radial glows in the
+       same violet family for a less mechanical, more "worked" feel than one
+       straight diagonal fade — a light lavender glow top-left, a deep
+       violet glow bottom-right, and the original two tones as the diagonal
+       base connecting them. #9A5AF4 stays anchored near the card so the
+       page still fades into it with no seam. */
     .bg {
       position: fixed;
       inset: 0;
       z-index: 0;
-      background: linear-gradient(353deg, #E3D2FE 0%, #9A5AF4 100%);
+      background:
+        radial-gradient(1100px 850px at 18% -8%, #E3D2FE 0%, rgba(227, 210, 254, 0) 58%),
+        radial-gradient(950px 750px at 88% 108%, #5A14B8 0%, rgba(90, 20, 184, 0) 55%),
+        linear-gradient(155deg, #C8A6F9 0%, #9A5AF4 100%);
     }
 
     /* ── LAYOUT ── */
