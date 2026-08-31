@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Bloom Up — Bientôt à Mons</title>
+  <link rel="preload" as="image" href="images/Teaser Page Header Image.webp" type="image/webp">
   <style>
     @font-face {
       font-family: 'Skinova';
@@ -52,17 +53,30 @@
     }
 
     /* ── BACKGROUND ──
-       Started from Laurent's flat two-stop gradient (Rectangle 117.svg,
-       #E3D2FE -> #9A5AF4); reworked into three layered radial glows in the
-       same violet family for a less mechanical, more "worked" feel than one
-       straight diagonal fade — a light lavender glow top-left, a deep
-       violet glow bottom-right, and the original two tones as the diagonal
-       base connecting them. #9A5AF4 stays anchored near the card so the
-       page still fades into it with no seam. */
+       The real photo (the drink + LED mask) is back as the base layer, with
+       the violet gradient laid over it at 80% opacity rather than replacing
+       it outright — the gradient still reads clearly, but the photo shows
+       through underneath. Gradient: three layered radial glows in the same
+       violet family (started from Laurent's flat Rectangle 117.svg,
+       #E3D2FE -> #9A5AF4) — light lavender top-left, deep violet
+       bottom-right, the original two tones as the diagonal base. #9A5AF4
+       stays anchored near the card so it still fades into it with no seam. */
     .bg {
       position: fixed;
       inset: 0;
       z-index: 0;
+    }
+    .bg picture, .bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+    .bg-gradient {
+      position: absolute;
+      inset: 0;
+      opacity: 0.7;
       background:
         radial-gradient(1100px 850px at 18% -8%, #E3D2FE 0%, rgba(227, 210, 254, 0) 58%),
         radial-gradient(950px 750px at 88% 108%, #5A14B8 0%, rgba(90, 20, 184, 0) 55%),
@@ -283,7 +297,13 @@
 <body>
 
 <!-- Fond plein écran -->
-<div class="bg" aria-hidden="true"></div>
+<div class="bg" aria-hidden="true">
+  <picture>
+    <source srcset="images/Teaser Page Header Image.webp" type="image/webp">
+    <img src="images/Teaser Page Header Image.png" alt="" fetchpriority="high">
+  </picture>
+  <div class="bg-gradient"></div>
+</div>
 
 <!-- Contenu centré -->
 <main class="page">
