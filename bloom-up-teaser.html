@@ -177,6 +177,11 @@
     }
 
     /* Input */
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+    .form-row .form-input-wrap { flex: 1; min-width: 0; }
     .form-input-wrap { position: relative; margin-bottom: 12px; }
     .form-input {
       width: 100%;
@@ -300,7 +305,7 @@
 
     <!-- Badge circulaire -->
     <div class="brand-badge">
-      <img src="images/Macaron header.png?v=2" alt="" aria-hidden="true" loading="lazy">
+      <img src="images/Macaron header.png?v=3" alt="" aria-hidden="true" loading="lazy">
     </div>
   </div>
 
@@ -309,11 +314,36 @@
     <h1 class="form-title">Inscris-toi pour fêter l'ouverture avec nous&nbsp;!</h1>
     <p class="form-body">
       Avant même d'ouvrir nos portes, on veut fêter ça avec toi.
-      <strong>20 invitations</strong> à la soirée de lancement ou <strong>50 boissons</strong> à gagner.
-      Une seule chose à faire — laisser ton adresse email.
+      <strong>Invitations VIP</strong> pour l'inauguration, boissons et soins à gagner —
+      et même un <strong>Bloom Up Pass</strong> pour les plus chanceux.
+      Une seule chose à faire — laisser tes coordonnées.
     </p>
 
     <form id="teaser-form" novalidate>
+      <div class="form-row">
+        <div class="form-input-wrap">
+          <input
+            class="form-input"
+            type="text"
+            name="prenom"
+            placeholder="Prénom"
+            autocomplete="given-name"
+            required
+            aria-label="Prénom"
+          >
+        </div>
+        <div class="form-input-wrap">
+          <input
+            class="form-input"
+            type="text"
+            name="nom"
+            placeholder="Nom"
+            autocomplete="family-name"
+            required
+            aria-label="Nom"
+          >
+        </div>
+      </div>
       <div class="form-input-wrap">
         <input
           class="form-input"
@@ -349,15 +379,17 @@
 (function () {
   var form = document.getElementById('teaser-form');
   var confirm = form.querySelector('.form-confirm');
-  var input = form.querySelector('.form-input');
+  var inputs = Array.prototype.slice.call(form.querySelectorAll('.form-input'));
+  var wraps = Array.prototype.slice.call(form.querySelectorAll('.form-input-wrap'));
   var btn = form.querySelector('.form-submit');
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!input.value || !input.validity.valid) {
-      input.focus();
-      input.style.borderColor = '#c0392b';
-      setTimeout(function () { input.style.borderColor = ''; }, 1800);
+    var firstInvalid = inputs.filter(function (i) { return !i.value || !i.validity.valid; })[0];
+    if (firstInvalid) {
+      firstInvalid.focus();
+      firstInvalid.style.borderColor = '#c0392b';
+      setTimeout(function () { firstInvalid.style.borderColor = ''; }, 1800);
       return;
     }
     // Simulation soumission — remplacer par vraie intégration (Mailchimp, etc.)
@@ -365,7 +397,7 @@
     btn.disabled = true;
     setTimeout(function () {
       btn.style.display = 'none';
-      input.closest('.form-input-wrap').style.display = 'none';
+      wraps.forEach(function (w) { w.style.display = 'none'; });
       confirm.style.display = 'block';
     }, 600);
   });
