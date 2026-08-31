@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Bloom Up — Bientôt à Mons</title>
-  <link rel="preload" as="image" href="images/Teaser Page Header Image.webp" type="image/webp">
   <style>
     @font-face {
       font-family: 'Skinova';
@@ -52,24 +51,17 @@
       color: var(--dark-brown);
     }
 
-    /* ── BACKGROUND ── */
+    /* ── BACKGROUND ──
+       Laurent's gradient (Rectangle 117.svg), translated from its SVG
+       linearGradient coordinates to a CSS angle — same two stops, same
+       direction, no need to ship the SVG itself for a flat two-color fade.
+       Its end color (#9A5AF4) is also the brand card's own background, so
+       the page fades straight into the card with no seam. */
     .bg {
       position: fixed;
       inset: 0;
       z-index: 0;
-    }
-    .bg picture, .bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-    }
-    .bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(20, 12, 6, 0.28);
+      background: linear-gradient(353deg, #E3D2FE 0%, #9A5AF4 100%);
     }
 
     /* ── LAYOUT ── */
@@ -286,12 +278,7 @@
 <body>
 
 <!-- Fond plein écran -->
-<div class="bg">
-  <picture>
-    <source srcset="images/Teaser Page Header Image.webp" type="image/webp">
-    <img src="images/Teaser Page Header Image.png" alt="" aria-hidden="true" fetchpriority="high">
-  </picture>
-</div>
+<div class="bg" aria-hidden="true"></div>
 
 <!-- Contenu centré -->
 <main class="page">
